@@ -20,7 +20,7 @@ $(function(){
     })
 
     // Automated PNG fixing.
-    $.ifixpng("<?php echo $config->chyrp_url; ?>/admin/images/icons/pixel.gif")
+    $.ifixpng("<?php echo $config->chyrp_url; ?>/admin/themes/default/images/icons/pixel.gif")
     $("img[src$=.png]").ifixpng()
 
     // "Help" links should open in popup windows.
@@ -164,8 +164,9 @@ var Write = {
         $("input.text").expand()
         $("textarea").each(function(){
             $(this).css({
-                minHeight: $(this).outerHeight() + 26,
-                lineHeight: "15px"
+                minHeight: $(this).outerHeight() + 24,
+                lineHeight: "18px",
+                padding: "3px 5px"
             }).autogrow()
         })
     },
@@ -204,7 +205,7 @@ var Write = {
         })
 
         $(document.createElement("button"))
-            .append("<?php echo __("Preview &#8594;"); ?>").attr("accesskey", "p")
+            .append("<?php echo __("Preview &rarr;"); ?>").attr("accesskey", "p")
             .click(function(){
                 $(".preview_me").each(function(){
                     var id = $(this).attr("id")
@@ -224,9 +225,9 @@ var Write = {
     more_options: function(){
         if ($("#more_options").size()) {
             if (Cookie.get("show_more_options") == "true")
-                var more_options_text = "<?php echo __("&#171; Fewer Options"); ?>";
+                var more_options_text = "<?php echo __("&uarr; Fewer Options"); ?>";
             else
-                var more_options_text = "<?php echo __("More Options &#187;"); ?>";
+                var more_options_text = "<?php echo __("More Options &darr;"); ?>";
 
             $(document.createElement("a")).attr({
                 id: "more_options_link",
@@ -241,10 +242,10 @@ var Write = {
 
             $("#more_options_link").click(function(){
                 if ($("#more_options").parent().css("display") == "none") {
-                    $(this).empty().append("<?php echo __("&#171; Fewer Options"); ?>")
+                    $(this).empty().append("<?php echo __("&uarr; Fewer Options"); ?>")
                     Cookie.set("show_more_options", "true", 30)
                 } else {
-                    $(this).empty().append("<?php echo __("More Options &#187;"); ?>")
+                    $(this).empty().append("<?php echo __("More Options &darr;"); ?>")
                     Cookie.destroy("show_more_options")
                 }
                 $("#more_options").parent().slideToggle()
@@ -284,7 +285,7 @@ var Manage = {
             return parent_hash
         },
         prepare_reordering: function(){
-            $(".sort_pages li").css({
+            $(".sort_pages li div").css({
                 background: "#f9f9f9",
                 padding: ".15em .5em",
                 marginBottom: ".5em",
@@ -292,15 +293,13 @@ var Manage = {
                 cursor: "move"
             })
 
-			console.log("Hello?");
-			
             $("ul.sort_pages").tree({
                 sortOn: "li",
                 dropOn: "li:not(.dragging) div",
-                hoverClass: "sort_hover",
+                hoverClass: "sort-hover",
                 done: function(){
                     $("#content > form > ul.sort_pages").loader()
-                    $.post("<?php echo $config->url; ?>/includes/ajax.php",
+                    $.post("<?php echo $config->chyrp_url; ?>/includes/ajax.php",
                            "action=organize_pages&"+ $("ul.sort_pages").sortable("serialize") + Manage.pages.parent_hash(),
                            function(){ $("#content > form > ul.sort_pages").loader(true) })
                 }
@@ -410,9 +409,9 @@ var Extend = {
                 success: Extend.finish_drop,
                 error: function() {
                     if (Extend.Drop.action == "enable")
-                        alert("<?php echo __("There was an error enabling the module."); ?>");
+                        alert("<?php echo __("There was an error enabling the extension."); ?>");
                     else
-                        alert("<?php echo __("There was an error disabling the module."); ?>");
+                        alert("<?php echo __("There was an error disabling the extension."); ?>");
 
                     Extend.Drop.pane.loader(true)
 
@@ -487,10 +486,9 @@ var Extend = {
         Extend.draw_dependencies()
     },
     draw_conflicts: function(){
-        if ($.browser.msie ||
+        if (!$.support.boxModel ||
             Route.action != "modules" ||
-            (!$(".extend li.depends").size() &&
-                !($.browser.safari || $.browser.opera || ($.browser.mozilla && $.browser.version >= 1.9))))
+            (!$(".extend li.conflict").size()))
             return false
 
         $("#conflicts_canvas").remove()
@@ -601,10 +599,9 @@ var Extend = {
         return true
     },
     draw_dependencies: function() {
-        if ($.browser.msie ||
+        if (!$.support.boxModel ||
             Route.action != "modules" ||
-            (!$(".extend li.depends").size() &&
-                !($.browser.safari || $.browser.opera || ($.browser.mozilla && $.browser.version >= 1.9))))
+            (!$(".extend li.depends").size()))
             return false
 
         $("#depends_canvas").remove()

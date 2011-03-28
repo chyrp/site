@@ -3,7 +3,7 @@
 {% block title %}${ "Edit Milestone" | translate("progress") }{% endblock %}
 
 {% block content %}
-            ${ milestone.delete_link('<img src="images/icons/delete.png" alt="delete" />'~ ("Delete" | translate), null, null, "button boo right") }
+            ${ milestone.delete_link('<img src="themes/default/images/icons/delete.png" alt="delete" />'~ ("Delete" | translate), null, null, "button boo right") }
             <h1>${ "Edit Milestone &#8220;%s&#8221;" | translate("progress") | format(milestone.name) }</h1>
             <form id="edit_milestone" class="split" action="{% admin "update_milestone" %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                 <fieldset>
@@ -24,7 +24,7 @@
                     <br />
 
                     <p>
-                        <button type="submit" class="yay"><img src="images/icons/success.png" alt="success" />${ "Update" | translate }</button>
+                        <button type="submit" class="yay"><img src="themes/default/images/icons/success.png" alt="success" />${ "Update" | translate }</button>
                     </p>
 
                     <input type="hidden" name="hash" value="$site.secure_hashkey" id="hash" />

@@ -1,6 +1,6 @@
 <?php
     require_once "model.Comment.php";
-    require_once "lib/Defensio.php";
+    require_once "lib/Akismet.php";
 
     class Comments extends Modules {
         public function __init() {
@@ -19,7 +19,6 @@
                              author_ip INTEGER DEFAULT '0',
                              author_agent VARCHAR(255) DEFAULT '',
                              status VARCHAR(32) default 'denied',
-                             signature VARCHAR(32) DEFAULT '',
                              post_id INTEGER DEFAULT 0,
                              user_id INTEGER DEFAULT 0,
                              created_at DATETIME DEFAULT NULL,
@@ -30,7 +29,7 @@
             $config->set("default_comment_status", "denied");
             $config->set("allowed_comment_html", array("strong", "em", "blockquote", "code", "pre", "a"));
             $config->set("comments_per_page", 25);
-            $config->set("defensio_api_key", null);
+            $config->set("akismet_api_key", null);
             $config->set("auto_reload_comments", 30);
             $config->set("enable_reload_comments", false);
 
@@ -51,7 +50,7 @@
             $config->remove("default_comment_status");
             $config->remove("allowed_comment_html");
             $config->remove("comments_per_page");
-            $config->remove("defensio_api_key");
+            $config->remove("akismet_api_key");
             $config->remove("auto_reload_comments");
             $config->remove("enable_reload_comments");
 
@@ -98,7 +97,7 @@
                              $created_at);
 
             if (isset($_POST['ajax']))
-                exit("{ comment_id: ".$_POST['id'].", comment_timestamp: \"".$created_at."\" }");
+                exit("{ \"comment_id\": \"".$_POST['id']."\", \"comment_timestamp\": \"".$created_at."\" }");
 
             if ($_POST['status'] == "spam")
                 Flash::notice(__("Comment updated."), "/admin/?action=manage_spam");
@@ -158,7 +157,8 @@
                             array("comments" => new Paginator(Comment::find(array("placeholders" => true,
                                                                                   "where" => $where,
                                                                                   "params" => $params)),
-                                                              25)));        }
+                                                              25)));
+        }
 
         static function admin_purge_spam() {
             if (!Visitor::current()->group->can("delete_comment"))
@@ -253,14 +253,14 @@
                          $config->set("auto_reload_comments", $_POST['auto_reload_comments']),
                          $config->set("enable_reload_comments", isset($_POST['enable_reload_comments'])));
 
-            if (!empty($_POST['defensio_api_key'])) {
-                $_POST['defensio_api_key'] = trim($_POST['defensio_api_key']);
-                $defensio = new Defensio($config->url, $_POST['defensio_api_key']);
-                if ($defensio->errorsExist()) {
-                    Flash::warning(__("Invalid Defensio API key."));
+            if (!empty($_POST['akismet_api_key'])) {
+                $_POST['akismet_api_key'] = trim($_POST['akismet_api_key']);
+                $akismet = new Akismet($config->url, $_POST['akismet_api_key']);
+                if (!$akismet->isKeyValid()) {
+                    Flash::warning(__("Invalid Akismet API key."), "/admin/?action=comment_settings");
                     $set[] = false;
                 } else
-                    $set[] = $config->set("defensio_api_key", $_POST['defensio_api_key']);
+                    $set[] = $config->set("akismet_api_key", $_POST['akismet_api_key']);
             }
 
             if (!in_array(false, $set))
@@ -358,7 +358,7 @@
                         continue;
 
                     if ($comment->status == "spam")
-                        $false_positives[] = $comment->signature;
+                        $false_positives[] = $comment;
 
                     $sql->update("comments", array("id" => $comment->id), array("status" => "denied"));
                 }
@@ -373,7 +373,7 @@
                         continue;
 
                     if ($comment->status == "spam")
-                        $false_positives[] = $comment->signature;
+                        $false_positives[] = $comment;
 
                     $sql->update("comments", array("id" => $comment->id), array("status" => "approved"));
                 }
@@ -389,21 +389,50 @@
 
                     $sql->update("comments", array("id" => $comment->id), array("status" => "spam"));
 
-                    $false_negatives[] = $comment->signature;
+                    $false_negatives[] = $comment;
                 }
 
                 Flash::notice(__("Selected comments marked as spam.", "comments"));
             }
 
-            if (!empty($config->defensio_api_key)) {
-                $defensio = new Defensio($config->url, $config->defensio_api_key);
+            if (!empty($config->akismet_api_key)) {
                 if (!empty($false_positives))
-                    $defensio->submitFalsePositives(implode(",", $false_positives));
+                    self::reportHam($false_positives);
                 if (!empty($false_negatives))
-                    $defensio->submitFalseNegatives(implode(",", $false_negatives));
+                    self::reportSpam($false_negatives);
             }
 
             redirect("/admin/?action=".$from);
+        }
+
+        static function reportHam($comments) {
+            $config = Config::current();
+            foreach($comments as $comment) {
+                $akismet = new Akismet($config->url, $config->akismet_api_key);
+                $akismet->setCommentAuthor($comment->author);
+                $akismet->setCommentAuthorEmail($comment->author_email);
+                $akismet->setCommentAuthorURL($comment->author_url);
+                $akismet->setCommentContent($comment->body);
+                $akismet->setPermalink($comment->post_id);
+                $akismet->setReferrer($comment->author_agent);
+                $akismet->setUserIP($comment->author_ip);
+                $akismet->submitHam();
+            }
+        }
+
+        static function reportSpam($comments) {
+            $config = Config::current();
+            foreach($comments as $comment) {
+                $akismet = new Akismet($config->url, $config->akismet_api_key);
+                $akismet->setCommentAuthor($comment->author);
+                $akismet->setCommentAuthorEmail($comment->author_email);
+                $akismet->setCommentAuthorURL($comment->author_url);
+                $akismet->setCommentContent($comment->body);
+                $akismet->setPermalink($comment->post_id);
+                $akismet->setReferrer($comment->author_agent);
+                $akismet->setUserIP($comment->author_ip);
+                $akismet->submitSpam();
+            }
         }
 
         static function manage_posts_column_header() {
@@ -441,15 +470,10 @@
                                                      "id, created_at",
                                                      array("post_id" => $_POST['post_id'],
                                                            "created_at >" => $_POST['last_comment'],
-                                                           "status not" => "spam",
-                                                           "status != 'denied' OR (
-                                                                (
-                                                                    user_id != 0 AND
-                                                                    user_id = :visitor_id
-                                                                ) OR (
-                                                                    id IN ".self::visitor_comments()."
-                                                                )
-                                                            )"),
+                                                           "status not" => "spam", "status != 'denied' OR (
+                                                              (user_id != 0 AND user_id = :visitor_id) OR (
+                                                                    id IN ".self::visitor_comments()."))"
+                                                           ),
                                                      "created_at ASC",
                                                      array(":visitor_id" => $visitor->id));
 
@@ -513,7 +537,6 @@
                              $chyrp->author->ip,
                              unfix($chyrp->author->agent),
                              $chyrp->status,
-                             $chyrp->signature,
                              datetime($comment->published),
                              ($comment->published == $comment->updated) ? null : datetime($comment->updated),
                              $post,
@@ -540,7 +563,6 @@
                              $comment->comment_author_IP,
                              "",
                              ((isset($comment->comment_approved) and $comment->comment_approved == "1") ? "approved" : "denied"),
-                             "",
                              $comment->comment_date,
                              null,
                              $post,
@@ -564,7 +586,6 @@
                              $comment["ip"],
                              "",
                              $status,
-                             "",
                              $comment["posted"],
                              null,
                              $post,
@@ -583,7 +604,6 @@
                              $comment["comment_ip"],
                              "",
                              ($comment["comment_visible"] ? "approved" : "denied"),
-                             "",
                              $comment["comment_created_on"],
                              $comment["comment_modified_on"],
                              $post,
@@ -627,15 +647,10 @@
 
             $counts = SQL::current()->select("comments",
                                              array("COUNT(post_id) AS total", "post_id as post_id"),
-                                             array("status not" => "spam",
-                                                   "status != 'denied' OR (
-                                                                              (
-                                                                                  user_id != 0 AND
-                                                                                  user_id = :visitor_id
-                                                                              ) OR (
-                                                                                  id IN ".self::visitor_comments()."
-                                                                              )
-                                                                          )"),
+                                             array("status not" => "spam", "status != 'denied' OR (
+                                                      (user_id != 0 AND user_id = :visitor_id) OR (
+                                                            id IN ".self::visitor_comments()."))"
+                                                  ),
                                              null,
                                              array(":visitor_id" => Visitor::current()->id),
                                              null,
@@ -654,15 +669,10 @@
 
             $times = SQL::current()->select("comments",
                                             array("MAX(created_at) AS latest", "post_id"),
-                                            array("status not" => "spam",
-                                                  "status != 'denied' OR (
-                                                                             (
-                                                                                 user_id != 0 AND
-                                                                                 user_id = :visitor_id
-                                                                             ) OR (
-                                                                                 id IN ".self::visitor_comments()."
-                                                                             )
-                                                                         )"),
+                                            array("status not" => "spam", "status != 'denied' OR (
+                                                     (user_id != 0 AND user_id = :visitor_id) OR (
+                                                           id IN ".self::visitor_comments()."))"
+                                                 ),
                                             null,
                                             array(":visitor_id" => Visitor::current()->id),
                                             null,
@@ -681,13 +691,8 @@
 
             $options["where"]["status not"] = "spam";
             $options["where"][] = "status != 'denied' OR (
-                                                             (
-                                                                 user_id != 0 AND
-                                                                 user_id = :visitor_id
-                                                             ) OR (
-                                                                 id IN ".self::visitor_comments()."
-                                                             )
-                                                         )";
+                                 (user_id != 0 AND user_id = :visitor_id) OR (
+                                       id IN ".self::visitor_comments()."))";
             $options["order"] = "created_at ASC";
             $options["params"][":visitor_id"] = Visitor::current()->id;
         }
@@ -708,24 +713,21 @@
             foreach ($comments as $comment) {
                 $updated = ($comment->updated) ? $comment->updated_at : $comment->created_at ;
 
-                $atom.= "       <chyrp:comment>\r";
-                $atom.= '           <updated>'.when("c", $updated).'</updated>'."\r";
-                $atom.= '           <published>'.when("c", $comment->created_at).'</published>'."\r";
-                $atom.= '           <author chyrp:user_id="'.$comment->user_id.'">'."\r";
-                $atom.= "               <name>".fix($comment->author)."</name>\r";
+                $atom.= "        <chyrp:comment>\r";
+                $atom.= '            <updated>'.when("c", $updated).'</updated>'."\r";
+                $atom.= '            <published>'.when("c", $comment->created_at).'</published>'."\r";
+                $atom.= '            <author chyrp:user_id="'.$comment->user_id.'">'."\r";
+                $atom.= "                <name>".fix($comment->author)."</name>\r";
                 if (!empty($comment->author_url))
-                    $atom.= "               <uri>".fix($comment->author_url)."</uri>\r";
-                $atom.= "               <email>".fix($comment->author_email)."</email>\r";
-                $atom.= "               <chyrp:login>".fix(@$comment->user->login)."</chyrp:login>\r";
-                $atom.= "               <chyrp:ip>".long2ip($comment->author_ip)."</chyrp:ip>\r";
-                $atom.= "               <chyrp:agent>".fix($comment->author_agent)."</chyrp:agent>\r";
-                $atom.= "           </author>\r";
-                $atom.= "           <content>".fix($comment->body)."</content>\r";
-
-                foreach (array("status", "signature") as $attr)
-                    $atom.= "           <chyrp:".$attr.">".fix($comment->$attr)."</chyrp:".$attr.">\r";
-
-                $atom.= "       </chyrp:comment>\r";
+                $atom.= "                <uri>".fix($comment->author_url)."</uri>\r";
+                $atom.= "                <email>".fix($comment->author_email)."</email>\r";
+                $atom.= "                <chyrp:login>".fix(@$comment->user->login)."</chyrp:login>\r";
+                $atom.= "                <chyrp:ip>".long2ip($comment->author_ip)."</chyrp:ip>\r";
+                $atom.= "                <chyrp:agent>".fix($comment->author_agent)."</chyrp:agent>\r";
+                $atom.= "            </author>\r";
+                $atom.= "            <content>".fix($comment->body)."</content>\r";
+                $atom.= "                <chyrp:status>".fix($comment->status)."</chyrp:status>\r";
+                $atom.= "        </chyrp:comment>\r";
             }
 
             return $atom;

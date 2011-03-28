@@ -4,22 +4,22 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>Chyrp Docs: Theme</title>
-		<link rel="stylesheet" href="http://chyrp.net/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<link rel="stylesheet" href="http://chyrp.net/css/docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<script src="http://chyrp.net/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/corner.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/docs.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="http://chyrp.net/code/css//main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<link rel="stylesheet" href="http://chyrp.net/code/css//docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="http://chyrp.net/code/js//jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//corner.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//docs.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/mint/?js" type="text/javascript"></script>
 		</head>
 	<body>
 		<h1 id="chyrp">Chyrp</h1>
-		<img id="logo" src="http://chyrp.net/images/logo.png" alt="Chyrp" />
+		<img id="logo" src="http://chyrp.net/code/logo.png" alt="Chyrp" />
 		<ul id="navigation">
 			<li><a href="http://chyrp.net/" title="Home">Home</a></li>
 			<li><a href="http://chyrp.net/extend" title="Extend">Extend</a></li>
 			<li><a href="http://chyrp.net/download" title="Download">Download</a></li>
-			<li><a href="http://chyrp.net/community" title="Community">Community</a></li>
+			<li><a href="http://chyrp.net/discuss" title="Community">Community</a></li>
 			<li class="selected"><a href="http://chyrp.net/code" title="Code">Code</a></li>
 			<li><a href="http://chyrp.net/blog" title="Blog">Blog</a></li>
 		</ul>
@@ -39,7 +39,7 @@
 								<div class="MFile"><a href="../xmlrpc-php.html">XML-RPC</a></div>
 							</div>
 							<div class="MEntry">
-								<div class="MFile"><a href="upgrade-php.html">Upgrader</a></div>
+								<div class="MFile"><a href="../upgrade-php.html">Upgrader</a></div>
 							</div>
 						</div>
 					</div>
@@ -134,8 +134,7 @@
 							</div>
 						</div>
 					</div>
-				</div><script language=JavaScript><!--
-HideAllBut([4, 5, 3, 2], 6);// --></script>
+				</div>
 			</div><!--Menu-->
 			<div id="Content">
 				<div class="CClass">
@@ -161,10 +160,6 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 											<td class="SEntry"><a href="#Theme.$title" >$title</a></td>
 											<td class="SDescription">The title for the current page.</td>
 										</tr>
-										<tr class="SVariable SIndent2">
-											<td class="SEntry"><a href="#Theme.$twig" >$twig</a></td>
-											<td class="SDescription">Contains the Twig_Loader instance.</td>
-										</tr>
 										<tr class="SGroup SIndent1">
 											<td class="SEntry"><a href="#Theme.Functions" >Functions</a></td>
 											<td class="SDescription"></td>
@@ -179,11 +174,11 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Theme.get_last_linear_child" >get_last_linear_child</a></td>
-											<td class="SDescription">Helper function to <a href="#Theme.pages_list" class="LFunction" >Theme.pages_list</a></td>
+											<td class="SDescription">Gets the last linear child of a page.</td>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#Theme.recurse_pages" >recurse_pages</a></td>
-											<td class="SDescription">Helper function to <a href="#Theme.pages_list" class="LFunction" >Theme.pages_list</a></td>
+											<td class="SDescription">Prepares the pages into &lt;Theme.$pages_flat&gt;.</td>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Theme.archive_list" >archive_list</a></td>
@@ -228,13 +223,6 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 							<pre>public $title</pre><p class="CParagraph">The title for the current page.</p></div>
 					</div>
 				</div>
-				<div class="CVariable">
-					<div class="CTopic">
-						<h3 class="CTitle"><a name="Theme.$twig"></a>$twig</h3>
-						<div class="CBody">
-							<pre>private $twig</pre><p class="CParagraph">Contains the Twig_Loader instance.</p></div>
-					</div>
-				</div>
 				<div class="CGroup">
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Theme.Functions"></a>Functions</h3>
@@ -252,7 +240,35 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Theme.pages_list"></a>pages_list</h3>
 						<div class="CBody">
-							<pre>public function pages_list()</pre><p class="CParagraph">Returns a simple array of list items to be used by the theme to generate a recursive array of pages.</p>
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function pages_list(</td>
+										<td class="PParameter">$start</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> 0,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$exclude</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Returns a simple array of list items to be used by the theme to generate a recursive array of pages.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$start</td>
+									<td class="CDLDescription">Page ID or slug to start at.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$exclude</td>
+									<td class="CDLDescription">Page ID to exclude from the list.&nbsp; Used in the admin area.</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -277,7 +293,18 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 									</tr>
 								</table>
 							</div>
-							<p class="CParagraph">Helper function to <a href="#Theme.pages_list" class="LFunction" >Theme.pages_list</a></p>
+							<p class="CParagraph">Gets the last linear child of a page.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$page</td>
+									<td class="CDLDescription">Page to get the last linear child of.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$origin</td>
+									<td class="CDLDescription">Where to start.</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -294,7 +321,14 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 									</tr>
 								</table>
 							</div>
-							<p class="CParagraph">Helper function to <a href="#Theme.pages_list" class="LFunction" >Theme.pages_list</a></p>
+							<p class="CParagraph">Prepares the pages into &lt;Theme.$pages_flat&gt;.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$page</td>
+									<td class="CDLDescription">Page to start recursion at.</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -319,12 +353,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 								</tr>
 							</table>
 							<h4 class="CHeading">Returns</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$archives</td>
-									<td class="CDLDescription">The array.&nbsp; Each entry as &ldquo;month&rdquo;, &ldquo;year&rdquo;, and &ldquo;url&rdquo; values, stored as an array.</td>
-								</tr>
-							</table>
+							<p class="CParagraph">The array.&nbsp; Each entry as &ldquo;month&rdquo;, &ldquo;year&rdquo;, and &ldquo;url&rdquo; values, stored as an array.</p>
 						</div>
 					</div>
 				</div>
@@ -388,7 +417,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			<a class="toogeneric" href="http://toogeneric.com/">&#42;</a>
+			<a class="toogeneric" href="http://chyrp.net/">&#42;</a>
 			Chyrp &copy; Alex Suraci 2007&mdash;
 		</div>
 	</body>

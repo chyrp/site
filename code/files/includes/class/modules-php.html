@@ -4,22 +4,22 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>Chyrp Docs: Modules</title>
-		<link rel="stylesheet" href="http://chyrp.net/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<link rel="stylesheet" href="http://chyrp.net/css/docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<script src="http://chyrp.net/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/corner.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/docs.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="http://chyrp.net/code/css//main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<link rel="stylesheet" href="http://chyrp.net/code/css//docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="http://chyrp.net/code/js//jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//corner.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//docs.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/mint/?js" type="text/javascript"></script>
 		</head>
 	<body>
 		<h1 id="chyrp">Chyrp</h1>
-		<img id="logo" src="http://chyrp.net/images/logo.png" alt="Chyrp" />
+		<img id="logo" src="http://chyrp.net/code/logo.png" alt="Chyrp" />
 		<ul id="navigation">
 			<li><a href="http://chyrp.net/" title="Home">Home</a></li>
 			<li><a href="http://chyrp.net/extend" title="Extend">Extend</a></li>
 			<li><a href="http://chyrp.net/download" title="Download">Download</a></li>
-			<li><a href="http://chyrp.net/community" title="Community">Community</a></li>
+			<li><a href="http://chyrp.net/discuss" title="Community">Community</a></li>
 			<li class="selected"><a href="http://chyrp.net/code" title="Code">Code</a></li>
 			<li><a href="http://chyrp.net/blog" title="Blog">Blog</a></li>
 		</ul>
@@ -39,7 +39,7 @@
 								<div class="MFile"><a href="../xmlrpc-php.html">XML-RPC</a></div>
 							</div>
 							<div class="MEntry">
-								<div class="MFile"><a href="upgrade-php.html">Upgrader</a></div>
+								<div class="MFile"><a href="../upgrade-php.html">Upgrader</a></div>
 							</div>
 						</div>
 					</div>
@@ -134,8 +134,7 @@
 							</div>
 						</div>
 					</div>
-				</div><script language=JavaScript><!--
-HideAllBut([4, 5, 3, 2], 6);// --></script>
+				</div>
 			</div><!--Menu-->
 			<div id="Content">
 				<div class="CClass">
@@ -160,6 +159,10 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 										<tr class="SVariable SIndent2 SMarked">
 											<td class="SEntry"><a href="#Modules.$instances" >$instances</a></td>
 											<td class="SDescription">Holds all Module instantiations.</td>
+										</tr>
+										<tr class="SVariable SIndent2">
+											<td class="SEntry"><a href="#Modules.$cancelled" >$cancelled</a></td>
+											<td class="SDescription">Is the module&rsquo;s execution cancelled?</td>
 										</tr>
 										<tr class="SGroup SIndent1">
 											<td class="SEntry"><a href="#Modules.Functions" >Functions</a></td>
@@ -192,6 +195,13 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 							<pre>static $instances</pre><p class="CParagraph">Holds all Module instantiations.</p></div>
 					</div>
 				</div>
+				<div class="CVariable">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Modules.$cancelled"></a>$cancelled</h3>
+						<div class="CBody">
+							<pre>public $cancelled</pre><p class="CParagraph">Is the module&rsquo;s execution cancelled?</p></div>
+					</div>
+				</div>
 				<div class="CGroup">
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Modules.Functions"></a>Functions</h3>
@@ -215,6 +225,17 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 								</table>
 							</div>
 							<p class="CParagraph">Sets the priority of an action for the module this function is called from.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$name</td>
+									<td class="CDLDescription">Name of the trigger to respond to.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$priority</td>
+									<td class="CDLDescription">Priority of the response.</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -246,6 +267,21 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 								</table>
 							</div>
 							<p class="CParagraph">Allows a module to respond to a trigger with multiple functions and custom priorities.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$name</td>
+									<td class="CDLDescription">Name of the trigger to respond to.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$function</td>
+									<td class="CDLDescription">Name of the class function to respond with.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$priority</td>
+									<td class="CDLDescription">Priority of the response.</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -253,7 +289,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			<a class="toogeneric" href="http://toogeneric.com/">&#42;</a>
+			<a class="toogeneric" href="http://chyrp.net/">&#42;</a>
 			Chyrp &copy; Alex Suraci 2007&mdash;
 		</div>
 	</body>

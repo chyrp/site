@@ -34,7 +34,7 @@
             $trigger->filter($this, "comment");
 
             if ($this->filtered) {
-                if (($this->status != "pingback" and !$this->status != "trackback") and !$group->can("code_in_comments"))
+                if (($this->status != "pingback" and $this->status != "trackback") and !$group->can("code_in_comments"))
                     $this->body = strip_tags($this->body, "<".join("><", Config::current()->allowed_comment_html).">");
 
                 $this->body_unfiltered = $this->body;
@@ -80,22 +80,19 @@
             } else
                 $status = $type;
 
-            if (!empty($config->defensio_api_key)) {
-                $comment = array("user-ip" => $_SERVER['REMOTE_ADDR'],
-                                 "article-date" => when("Y/m/d", $post->created_at),
-                                 "comment-author" => $author,
-                                 "comment-type" => $type,
-                                 "comment-content" => $body,
-                                 "comment-author-email" => $email,
-                                 "comment-author-url" => $url,
-                                 "permalink" => $post->url(),
-                                 "referrer" => $_SERVER['HTTP_REFERER'],
-                                 "user-logged-in" => logged_in());
+            if (!empty($config->akismet_api_key)) {
+                $akismet = new Akismet($config->url, $config->akismet_api_key);
 
-                $defensio = new Defensio($config->url, $config->defensio_api_key);
-                list($spam, $spaminess, $signature) = $defensio->auditComment($comment);
+                $akismet->setCommentAuthor($author);
+                $akismet->setCommentAuthorEmail($email);
+                $akismet->setCommentAuthorURL($url);
+                $akismet->setCommentContent($body);
+                $akismet->setPermalink($post->url());
+                $akismet->setCommentType($type);
+                $akismet->setReferrer($_SERVER['HTTP_REFERER']);
+                $akismet->setUserIP($_SERVER['REMOTE_ADDR']);
 
-                if ($spam) {
+                if ($akismet->isCommentSpam()) {
                     self::add($body,
                               $author,
                               $url,
@@ -103,7 +100,6 @@
                               $_SERVER['REMOTE_ADDR'],
                               $_SERVER['HTTP_USER_AGENT'],
                               "spam",
-                              $signature,
                               null,
                               null,
                               $post,
@@ -117,7 +113,6 @@
                                          $_SERVER['REMOTE_ADDR'],
                                          $_SERVER['HTTP_USER_AGENT'],
                                          $status,
-                                         $signature,
                                          null,
                                          null,
                                          $post,
@@ -127,7 +122,7 @@
                     $_SESSION['comments'][] = $comment->id;
 
                     if (isset($_POST['ajax']))
-                        exit("{ comment_id: ".$comment->id.", comment_timestamp: \"".$comment->created_at."\" }");
+                        exit("{ \"comment_id\": \"".$comment->id."\", \"comment_timestamp\": \"".$comment->created_at."\" }");
 
                     Flash::notice(__("Comment added."), $post->url()."#comment_".$comment->id);
                 }
@@ -139,7 +134,6 @@
                                      $_SERVER['REMOTE_ADDR'],
                                      $_SERVER['HTTP_USER_AGENT'],
                                      $status,
-                                     "",
                                      null,
                                      null,
                                      $post,
@@ -149,7 +143,7 @@
                 $_SESSION['comments'][] = $comment->id;
 
                 if (isset($_POST['ajax']))
-                    exit("{ comment_id: ".$comment->id.", comment_timestamp: \"".$comment->created_at."\" }");
+                    exit("{ \"comment_id\": \"".$comment->id."\", \"comment_timestamp\": \"".$comment->created_at."\" }");
 
                 Flash::notice(__("Comment added."), $post->url()."#comment_".$comment->id);
             }
@@ -167,14 +161,12 @@
          *     $ip - The commenter's IP address.
          *     $agent - The commenter's user agent.
          *     $status - The new comment's status.
-         *     $signature - Defensio's data signature of the comment, generated when it is checked
-         *                  if it's spam in <Comment.create>. Optional.
          *     $created_at - The new comment's "created" timestamp.
          *     $updated_at - The new comment's "last updated" timestamp.
          *     $post - The <Post> they're commenting on.
          *     $user_id - The ID of this <User> this comment was made by.
          */
-        static function add($body, $author, $url, $email, $ip, $agent, $status, $signature, $created_at = null, $updated_at = null, $post, $user_id) {
+        static function add($body, $author, $url, $email, $ip, $agent, $status, $created_at = null, $updated_at = null, $post, $user_id) {
             if (!empty($url)) # Add the http:// if it isn't there.
                 if (!@parse_url($url, PHP_URL_SCHEME))
                     $url = "http://".$url;
@@ -192,11 +184,10 @@
                                "author_ip" => $ip,
                                "author_agent" => $agent,
                                "status" => $status,
-                               "signature" => $signature,
-                               "post_id" => $post->id,
-                               "user_id"=> $user_id,
                                "created_at" => oneof($created_at, datetime()),
-                               "updated_at" => oneof($updated_at, null)));
+                               "updated_at" => oneof($updated_at, "0000-00-00 00:00:00"),
+                               "post_id" => $post->id,
+                               "user_id"=> $user_id));
             $new = new self($sql->latest("comments"));
 
             Trigger::current()->call("add_comment", $new);
@@ -207,10 +198,10 @@
             $sql = SQL::current();
             $sql->update("comments",
                          array("id" => $this->id),
-                         array("body" => $body,
-                               "author" => strip_tags($author),
+                         array("author" => strip_tags($author),
                                "author_email" => strip_tags($author_email),
                                "author_url" => strip_tags($author_url),
+                               "body" => $body,
                                "status" => $status,
                                "created_at" => $timestamp,
                                "updated_at" => ($update_timestamp) ? datetime() : $this->updated_at));

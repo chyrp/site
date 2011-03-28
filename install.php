@@ -20,8 +20,8 @@
 
     ob_start();
 
-    if (version_compare(PHP_VERSION, "5.1.3", "<"))
-        exit("Chyrp requires PHP 5.1.3 or greater. Installation cannot continue.");
+    if (version_compare(PHP_VERSION, "5.2.0", "<"))
+        exit("Chyrp requires PHP 5.2.0 or greater. Installation cannot continue.");
 
     require_once INCLUDES_DIR."/helpers.php";
 
@@ -82,12 +82,12 @@
         if ($_POST['adapter'] == "sqlite" and !@is_writable(dirname($_POST['database'])))
             $errors[] = __("SQLite database file could not be created. Please make sure your server has write permissions to the location for the database.");
         else {
-            $sql = SQL::current(array("host" => $_POST['host'],
+            $sql = SQL::current(array("host"     => $_POST['host'],
                                       "username" => $_POST['username'],
                                       "password" => $_POST['password'],
                                       "database" => $_POST['database'],
-                                      "prefix" => $_POST['prefix'],
-                                      "adapter" => $_POST['adapter']));
+                                      "prefix"   => $_POST['prefix'],
+                                      "adapter"  => $_POST['adapter']));
 
             if (!$sql->connect(true))
                 $errors[] = _f("Could not connect to the specified database:\n<pre>%s</pre>", array($sql->error));
@@ -304,11 +304,11 @@
                                     "name" => $name,
                                     "group_id" => 0));
 
-            $groups = array("admin" => array_keys($names),
+            $groups = array("admin"  => array_keys($names),
                             "member" => array("view_site"),
                             "friend" => array("view_site", "view_private"),
                             "banned" => array(),
-                            "guest" => array("view_site"));
+                            "guest"  => array("view_site"));
 
             # Insert the default groups (see above)
             $group_id = array();
@@ -406,7 +406,7 @@
                 padding: .6em .8em .5em 2.75em;
                 border-bottom: .1em solid #FBC2C4;
                 color: #D12F19;
-                background: #FBE3E4 url('./admin/images/icons/failure.png') no-repeat .7em center;
+                background: #FBE3E4 url('./admin/themes/default/images/icons/failure.png') no-repeat .7em center;
             }
             .error.last {
                 margin: 0 0 1em 0;
@@ -502,12 +502,15 @@
                             .animate({ opacity: "show" })
 
                         $("#host_field, #username_field, #password_field, #prefix_field")
-                            .parent()
-                                .animate({ height: "hide", opacity: "hide" })
+                            .children()
+                                .val("")
+                                    .closest("div")
+                                        .animate({ height: "hide", opacity: "hide" })
                     } else {
                         $("#database_field label .sub")
                             .animate({ opacity: "hide" },
-                                     function(){ $(this).remove() })
+                                function(){ $(this).remove() })
+
                         $("#host_field, #username_field, #password_field, #prefix_field")
                             .parent()
                                 .animate({ height: "show", opacity: "show" })
@@ -517,11 +520,11 @@
         </script>
     </head>
     <body>
-<?php foreach ($errors as $error): ?>
+        <?php foreach ($errors as $error): ?>
         <div class="error<?php if ($index + 1 == count($errors)) echo " last"; ?>"><?php echo $error; ?></div>
-<?php endforeach; ?>
+        <?php endforeach; ?>
         <div class="window">
-<?php if (!$installed): ?>
+        <?php if (!$installed): ?>
             <form action="install.php" method="post" accept-charset="utf-8">
                 <h1><?php echo __("Database Setup"); ?></h1>
                 <p id="adapter_field">
@@ -558,9 +561,7 @@
                     </p>
                 </div>
                 <p id="database_field">
-                    <label for="database">
-                        <?php echo __("Database"); ?>
-                        <?php echo (isset($_POST['adapter']) and $_POST['adapter'] == "sqlite") ? '<span class="sub">'.__("(full path)").'</span>' : "" ; ?></label>
+                    <label for="database"><?php echo __("Database"); ?> <?php echo (isset($_POST['adapter']) and $_POST['adapter'] == "sqlite") ? '<span class="sub">'.__("(full path)").'</span>' : "" ; ?></label>
                     <input type="text" name="database" value="<?php value_fallback("database"); ?>" id="database" />
                 </p>
                 <div<?php echo (isset($_POST['adapter']) and $_POST['adapter'] == "sqlite") ? ' style="display: none"' : "" ; ?>>
@@ -584,12 +585,12 @@
                 <p id="timezone_field">
                     <label for="timezone"><?php echo __("What time is it?"); ?></label>
                     <select name="timezone" id="timezone">
-<?php foreach (timezones() as $zone): ?>
+                    <?php foreach (timezones() as $zone): ?>
                         <option value="<?php echo $zone["name"]; ?>"<?php selected($zone["name"], oneof(@$_POST['timezone'], $default_timezone)); ?>>
                             <?php echo strftime("%I:%M %p on %B %d, %Y", $zone["now"]); ?> &mdash;
                             <?php echo str_replace(array("_", "St "), array(" ", "St. "), $zone["name"]); ?>
                         </option>
-<?php endforeach; ?>
+                    <?php endforeach; ?>
                     </select>
                 </p>
 
@@ -615,7 +616,7 @@
 
                 <button type="submit"><?php echo __("Install! &rarr;"); ?></button>
             </form>
-<?php else: ?>
+        <?php else: ?>
             <h1><?php echo __("Done!"); ?></h1>
             <p>
                 <?php echo __("Chyrp has been successfully installed."); ?>
@@ -623,18 +624,16 @@
             <h2><?php echo __("So, what now?"); ?></h2>
             <ol>
                 <li><?php echo __("<strong>Delete install.php</strong>, you won't need it anymore."); ?></li>
-<?php if (!is_writable(INCLUDES_DIR."/caches")): ?>
+            <?php if (!is_writable(INCLUDES_DIR."/caches")): ?>
                 <li><?php echo __("CHMOD <code>/includes/caches</code> to 777."); ?></li>
-<?php endif; ?>
+            <?php endif; ?>
                 <li><a href="http://chyrp.net/extend/type/translation"><?php echo __("Look for a translation for your language."); ?></a></li>
                 <li><a href="http://chyrp.net/extend/type/module"><?php echo __("Install some Modules."); ?></a></li>
                 <li><a href="http://chyrp.net/extend/type/feather"><?php echo __("Find some Feathers you want."); ?></a></li>
                 <li><a href="README.markdown"><?php echo __("Read &#8220;Getting Started&#8221;"); ?></a></li>
             </ol>
             <a class="big" href="<?php echo $config->chyrp_url; ?>"><?php echo __("Take me to my site! &rarr;"); ?></a>
-<?php
-    endif;
-?>
+        <?php endif; ?>
         </div>
     </body>
 </html>

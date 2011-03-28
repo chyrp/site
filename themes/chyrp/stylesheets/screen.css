@@ -791,7 +791,13 @@ form.search {
             #blog .post.text .content p {
                 margin: 0;
                 padding-bottom: 1em;
-}
+        }
+        #blog .post-comments {
+        	margin-left: 20em;
+        }
+        #blog #comment li {
+            
+        }
 
 /* Notification Messages */
 .flash {

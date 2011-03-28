@@ -5,7 +5,7 @@
 {% block content %}
             {% if visitor.group.can("add_forum") %}
             <a href="{% admin "new_forum" %}" class="button yay right">
-                <img src="images/icons/add.png" alt="add" /> ${ "Add Forum" | translate("discuss") }
+                <img src="themes/default/images/icons/add.png" alt="add" /> ${ "Add Forum" | translate("discuss") }
             </a>
             {% endif %}
             <h1>${ "Manage Forums" | translate("discuss") }</h1>
@@ -31,14 +31,14 @@
                         <td>{% if forum.last_activity %}${ forum.last_activity | strftime }{% else %}<span class="sub">${ "never" | translate }</span>{% endif %}</td>
                         ${ trigger.call("manage_forums_column", forum) }
                         {% if forum.editable and forum.deletable %}
-                        <td class="controls">${ forum.edit_link('<img src="images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
-                        <td class="controls">${ forum.delete_link('<img src="images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
+                        <td class="controls">${ forum.edit_link('<img src="themes/default/images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
+                        <td class="controls">${ forum.delete_link('<img src="themes/default/images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
                         {% elseif forum.editable or forum.deletable %}
                         {% if visitor.group.can("edit_aggregate") %}
-                        <td class="controls">${ forum.edit_link('<img src="images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
+                        <td class="controls">${ forum.edit_link('<img src="themes/default/images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
                         {% endif %}
                         {% if visitor.group.can("delete_aggregate") %}
-                        <td class="controls">${ forum.delete_link('<img src="images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
+                        <td class="controls">${ forum.delete_link('<img src="themes/default/images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
                         {% endif %}
                         {% endif %}
                     </tr>

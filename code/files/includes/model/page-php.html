@@ -4,22 +4,22 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>Chyrp Docs: Page</title>
-		<link rel="stylesheet" href="http://chyrp.net/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<link rel="stylesheet" href="http://chyrp.net/css/docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<script src="http://chyrp.net/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/corner.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/docs.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="http://chyrp.net/code/css//main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<link rel="stylesheet" href="http://chyrp.net/code/css//docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="http://chyrp.net/code/js//jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//corner.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//docs.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/mint/?js" type="text/javascript"></script>
 		</head>
 	<body>
 		<h1 id="chyrp">Chyrp</h1>
-		<img id="logo" src="http://chyrp.net/images/logo.png" alt="Chyrp" />
+		<img id="logo" src="http://chyrp.net/code/logo.png" alt="Chyrp" />
 		<ul id="navigation">
 			<li><a href="http://chyrp.net/" title="Home">Home</a></li>
 			<li><a href="http://chyrp.net/extend" title="Extend">Extend</a></li>
 			<li><a href="http://chyrp.net/download" title="Download">Download</a></li>
-			<li><a href="http://chyrp.net/community" title="Community">Community</a></li>
+			<li><a href="http://chyrp.net/discuss" title="Community">Community</a></li>
 			<li class="selected"><a href="http://chyrp.net/code" title="Code">Code</a></li>
 			<li><a href="http://chyrp.net/blog" title="Blog">Blog</a></li>
 		</ul>
@@ -39,7 +39,7 @@
 								<div class="MFile"><a href="../xmlrpc-php.html">XML-RPC</a></div>
 							</div>
 							<div class="MEntry">
-								<div class="MFile"><a href="upgrade-php.html">Upgrader</a></div>
+								<div class="MFile"><a href="../upgrade-php.html">Upgrader</a></div>
 							</div>
 						</div>
 					</div>
@@ -134,8 +134,7 @@
 							</div>
 						</div>
 					</div>
-				</div><script language=JavaScript><!--
-HideAllBut([2, 3, 1, 4], 6);// --></script>
+				</div>
 			</div><!--Menu-->
 			<div id="Content">
 				<div class="CClass">
@@ -173,11 +172,11 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#Page.update" >update</a></td>
-											<td class="SDescription">Updates the given page.</td>
+											<td class="SDescription">Updates the page.</td>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Page.delete" >delete</a></td>
-											<td class="SDescription">Deletes the given page.&nbsp; Calls the &ldquo;delete_page&rdquo; trigger and passes the <a href="#Page" class="LClass" >Page</a> as an argument.</td>
+											<td class="SDescription">Deletes the given page.</td>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#Page.exists" >exists</a></td>
@@ -201,15 +200,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Page.user" >user</a></td>
-											<td class="SDescription">Returns a page&rsquo;s creator.&nbsp; Example: $page-&gt;user()-&gt;full_name</td>
-										</tr>
-										<tr class="SFunction SIndent2">
-											<td class="SEntry"><a href="#Page.edit_link" >edit_link</a></td>
-											<td class="SDescription">Outputs an edit link for the page, if the &lt;User.can&gt; edit_page.</td>
-										</tr>
-										<tr class="SFunction SIndent2 SMarked">
-											<td class="SEntry"><a href="#Page.delete_link" >delete_link</a></td>
-											<td class="SDescription">Outputs a delete link for the page, if the &lt;User.can&gt; delete_page.</td>
+											<td class="SDescription">Returns a page&rsquo;s creator.&nbsp; Example: $page-&gt;user-&gt;full_name</td>
 										</tr>
 									</table>
 								</div>
@@ -295,15 +286,21 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$parent_id,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
+										<td class="PParameter">$user</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$show_in_list,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
+										<td class="PParameter">$parent_id</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> 0,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$show_in_list</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> true,</td>
 										</tr>
 									<tr>
 										<td></td>
@@ -313,15 +310,15 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$clean,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
+										<td class="PParameter">$clean</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> &quot;&quot;,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$url,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
+										<td class="PParameter">$url</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> &quot;&quot;,</td>
 										</tr>
 									<tr>
 										<td></td>
@@ -333,19 +330,13 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										<td></td>
 										<td class="PParameter">$updated_at</td>
 										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$user_id</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null</td>
+										<td class="PDefaultValue"> &quot;0000-00-00 00:00:00&quot;</td>
 										<td class="PAfterParameters">)</td>
 									</tr>
 								</table>
 							</div>
 							<p class="CParagraph">Adds a page to the database.</p>
-						<p class="CParagraph">Calls the add_page trigger with the inserted ID.</p>
+						<p class="CParagraph">Calls the <code class="inline">add_page</code> trigger with the new <a href="#Page" class="LClass" >Page</a>.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
@@ -357,6 +348,10 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 									<td class="CDLDescription">The Body for the new page.</td>
 								</tr>
 								<tr>
+									<td class="CDLEntry">$body</td>
+									<td class="CDLDescription">The <a href="../common-php.html#User" class="LFile" >User</a> or &lt;User.id&gt; of the page&rsquo;s author.</td>
+								</tr>
+								<tr>
 									<td class="CDLEntry">$parent_id</td>
 									<td class="CDLDescription">The ID of the new page&rsquo;s parent page (0 for none).</td>
 								</tr>
@@ -365,12 +360,16 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 									<td class="CDLDescription">Whether or not to show it in the pages list.</td>
 								</tr>
 								<tr>
+									<td class="CDLEntry">$list_order</td>
+									<td class="CDLDescription">The order of the page in the list.</td>
+								</tr>
+								<tr>
 									<td class="CDLEntry">$clean</td>
-									<td class="CDLDescription">The sanitized URL (or empty to default to &ldquo;(feather).(new page&rsquo;s id)&rdquo;).</td>
+									<td class="CDLDescription">The clean URL.</td>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$url</td>
-									<td class="CDLDescription">The unique URL (or empty to default to &ldquo;(feather).(new page&rsquo;s id)&rdquo;).</td>
+									<td class="CDLDescription">The unique URL.</td>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$created_at</td>
@@ -380,18 +379,9 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 									<td class="CDLEntry">$updated_at</td>
 									<td class="CDLDescription">The new page&rsquo;s &ldquo;last updated&rdquo; timestamp.</td>
 								</tr>
-								<tr>
-									<td class="CDLEntry">$user_id</td>
-									<td class="CDLDescription">The ID of the user that created the page.&nbsp; Defaults to the visitor&rsquo;s ID.</td>
-								</tr>
 							</table>
 							<h4 class="CHeading">Returns</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$id</td>
-									<td class="CDLDescription">The newly created page&rsquo;s ID.</td>
-								</tr>
-							</table>
+							<p class="CParagraph">The newly created <a href="#Page" class="LClass" >Page</a>.</p>
 							<h4 class="CHeading">See Also</h4>
 							<p class="CParagraph"><a href="#Page.update" class="LFunction" >update</a></p>
 						</div>
@@ -405,50 +395,69 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								<table border="0" cellspacing="0" cellpadding="0">
 									<tr>
 										<td class="PBeforeParameters">public function update(</td>
-										<td class="PParameter">$title,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$body,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$parent_id,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$show_in_list,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$list_order,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$url,</td>
-										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
-										<td class="PDefaultValue"></td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$update_timestamp</td>
+										<td class="PParameter">$title</td>
 										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> true</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$body</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$user</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$parent_id</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$show_in_list</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$list_order</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$clean</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$url</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$created_at</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$updated_at</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null</td>
 										<td class="PAfterParameters">)</td>
 									</tr>
 								</table>
 							</div>
-							<p class="CParagraph">Updates the given page.</p>
+							<p class="CParagraph">Updates the page.</p>
+						<p class="CParagraph">Calls the <code class="inline">update_page</code> trigger with the updated <a href="#Page" class="LClass" >Page</a> and the original <a href="#Page" class="LClass" >Page</a>.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
@@ -457,7 +466,11 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$body</td>
-									<td class="CDLDescription">The new Bod.</td>
+									<td class="CDLDescription">The new Body.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$body</td>
+									<td class="CDLDescription">The <a href="../common-php.html#User" class="LFile" >User</a> or &lt;User.id&gt; of the page&rsquo;s author.</td>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$parent_id</td>
@@ -468,8 +481,20 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 									<td class="CDLDescription">Whether or not to show it in the pages list.</td>
 								</tr>
 								<tr>
+									<td class="CDLEntry">$clean</td>
+									<td class="CDLDescription">The page&rsquo;s clean URL.</td>
+								</tr>
+								<tr>
 									<td class="CDLEntry">$url</td>
-									<td class="CDLDescription">The new page URL.</td>
+									<td class="CDLDescription">The page&rsquo;s unique URL.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$created_at</td>
+									<td class="CDLDescription">The page&rsquo;s &ldquo;created&rdquo; timestamp.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$updated_at</td>
+									<td class="CDLDescription">The page&rsquo;s &ldquo;last updated&rdquo; timestamp.</td>
 								</tr>
 							</table>
 						</div>
@@ -483,7 +508,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								<table border="0" cellspacing="0" cellpadding="0">
 									<tr>
 										<td class="PBeforeParameters">static function delete(</td>
-										<td class="PParameter">$id,</td>
+										<td class="PParameter">$page_id,</td>
 										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
 										<td class="PDefaultValue"></td>
 										</tr>
@@ -496,12 +521,17 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 									</tr>
 								</table>
 							</div>
-							<p class="CParagraph">Deletes the given page.&nbsp; Calls the &ldquo;delete_page&rdquo; trigger and passes the <a href="#Page" class="LClass" >Page</a> as an argument.</p>
+							<p class="CParagraph">Deletes the given page.</p>
+						<p class="CParagraph">Calls the <code class="inline">delete_page</code> trigger with the <a href="#Page" class="LClass" >Page</a> to delete.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
-									<td class="CDLEntry">$id</td>
-									<td class="CDLDescription">The page to delete.&nbsp; Child pages if this page will be removed as well.</td>
+									<td class="CDLEntry">$page_id</td>
+									<td class="CDLDescription">The page to delete.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$recursive</td>
+									<td class="CDLDescription">Should the page&rsquo;s children be deleted?&nbsp; (default: false)</td>
 								</tr>
 							</table>
 						</div>
@@ -526,13 +556,6 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								<tr>
 									<td class="CDLEntry">$page_id</td>
 									<td class="CDLDescription">The page ID to check</td>
-								</tr>
-							</table>
-							<h4 class="CHeading">Returns</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">true</td>
-									<td class="CDLDescription">if a page with that ID is in the database.</td>
 								</tr>
 							</table>
 						</div>
@@ -560,12 +583,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</tr>
 							</table>
 							<h4 class="CHeading">Returns</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$url</td>
-									<td class="CDLDescription">The unique version of the passed clean URL.&nbsp; If it&rsquo;s not used, it&rsquo;s the same as $clean.&nbsp; If it is, a number is appended.</td>
-								</tr>
-							</table>
+							<p class="CParagraph">The unique version of the passed clean URL.&nbsp; If it&rsquo;s not used, it&rsquo;s the same as $clean.&nbsp; If it is, a number is appended.</p>
 						</div>
 					</div>
 				</div>
@@ -582,6 +600,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 						<h3 class="CTitle"><a name="Page.parent"></a>parent</h3>
 						<div class="CBody">
 							<pre>public function parent()</pre><p class="CParagraph">Returns a page&rsquo;s parent.&nbsp; Example: $page-&gt;parent()-&gt;parent()-&gt;title</p>
+						<p class="CParagraph">!!&nbsp; DEPRECATED AFTER 2.0 !!</p>
 						</div>
 					</div>
 				</div>
@@ -590,6 +609,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 						<h3 class="CTitle"><a name="Page.children"></a>children</h3>
 						<div class="CBody">
 							<pre>public function children()</pre><p class="CParagraph">Returns a page&rsquo;s children.</p>
+						<p class="CParagraph">!!&nbsp; DEPRECATED AFTER 2.0 !!</p>
 						</div>
 					</div>
 				</div>
@@ -597,99 +617,8 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Page.user"></a>user</h3>
 						<div class="CBody">
-							<pre>public function user()</pre><p class="CParagraph">Returns a page&rsquo;s creator.&nbsp; Example: $page-&gt;user()-&gt;full_name</p>
-						</div>
-					</div>
-				</div>
-				<div class="CFunction">
-					<div class="CTopic">
-						<h3 class="CTitle"><a name="Page.edit_link"></a>edit_link</h3>
-						<div class="CBody">
-							<div class="code">
-								<table border="0" cellspacing="0" cellpadding="0">
-									<tr>
-										<td class="PBeforeParameters">public function edit_link(</td>
-										<td class="PParameter">$text</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$before</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$after</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null</td>
-										<td class="PAfterParameters">)</td>
-									</tr>
-								</table>
-							</div>
-							<p class="CParagraph">Outputs an edit link for the page, if the &lt;User.can&gt; edit_page.</p>
-							<h4 class="CHeading">Parameters</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$text</td>
-									<td class="CDLDescription">The text to show for the link.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$before</td>
-									<td class="CDLDescription">If the link can be shown, show this before it.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$after</td>
-									<td class="CDLDescription">If the link can be shown, show this after it.</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div class="CFunction">
-					<div class="CTopic">
-						<h3 class="CTitle"><a name="Page.delete_link"></a>delete_link</h3>
-						<div class="CBody">
-							<div class="code">
-								<table border="0" cellspacing="0" cellpadding="0">
-									<tr>
-										<td class="PBeforeParameters">public function delete_link(</td>
-										<td class="PParameter">$text</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$before</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$after</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null</td>
-										<td class="PAfterParameters">)</td>
-									</tr>
-								</table>
-							</div>
-							<p class="CParagraph">Outputs a delete link for the page, if the &lt;User.can&gt; delete_page.</p>
-							<h4 class="CHeading">Parameters</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$text</td>
-									<td class="CDLDescription">The text to show for the link.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$before</td>
-									<td class="CDLDescription">If the link can be shown, show this before it.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$after</td>
-									<td class="CDLDescription">If the link can be shown, show this after it.</td>
-								</tr>
-							</table>
+							<pre>public function user()</pre><p class="CParagraph">Returns a page&rsquo;s creator.&nbsp; Example: $page-&gt;user-&gt;full_name</p>
+						<p class="CParagraph">!!&nbsp; DEPRECATED AFTER 2.0 !!</p>
 						</div>
 					</div>
 				</div>
@@ -697,7 +626,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			<a class="toogeneric" href="http://toogeneric.com/">&#42;</a>
+			<a class="toogeneric" href="http://chyrp.net/">&#42;</a>
 			Chyrp &copy; Alex Suraci 2007&mdash;
 		</div>
 	</body>

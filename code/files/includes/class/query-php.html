@@ -4,22 +4,22 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>Chyrp Docs: Query</title>
-		<link rel="stylesheet" href="http://chyrp.net/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<link rel="stylesheet" href="http://chyrp.net/css/docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<script src="http://chyrp.net/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/corner.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/docs.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="http://chyrp.net/code/css//main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<link rel="stylesheet" href="http://chyrp.net/code/css//docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="http://chyrp.net/code/js//jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//corner.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//docs.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/mint/?js" type="text/javascript"></script>
 		</head>
 	<body>
 		<h1 id="chyrp">Chyrp</h1>
-		<img id="logo" src="http://chyrp.net/images/logo.png" alt="Chyrp" />
+		<img id="logo" src="http://chyrp.net/code/logo.png" alt="Chyrp" />
 		<ul id="navigation">
 			<li><a href="http://chyrp.net/" title="Home">Home</a></li>
 			<li><a href="http://chyrp.net/extend" title="Extend">Extend</a></li>
 			<li><a href="http://chyrp.net/download" title="Download">Download</a></li>
-			<li><a href="http://chyrp.net/community" title="Community">Community</a></li>
+			<li><a href="http://chyrp.net/discuss" title="Community">Community</a></li>
 			<li class="selected"><a href="http://chyrp.net/code" title="Code">Code</a></li>
 			<li><a href="http://chyrp.net/blog" title="Blog">Blog</a></li>
 		</ul>
@@ -39,7 +39,7 @@
 								<div class="MFile"><a href="../xmlrpc-php.html">XML-RPC</a></div>
 							</div>
 							<div class="MEntry">
-								<div class="MFile"><a href="upgrade-php.html">Upgrader</a></div>
+								<div class="MFile"><a href="../upgrade-php.html">Upgrader</a></div>
 							</div>
 						</div>
 					</div>
@@ -134,15 +134,14 @@
 							</div>
 						</div>
 					</div>
-				</div><script language=JavaScript><!--
-HideAllBut([4, 5, 3, 2], 6);// --></script>
+				</div>
 			</div><!--Menu-->
 			<div id="Content">
 				<div class="CClass">
 					<div class="CTopic" id="MainTopic">
 						<h1 class="CTitle"><a name="Query"></a>Query</h1>
 						<div class="CBody">
-							<p class="CParagraph">Handles a query based on the <a href="SQL-php.html#SQL.method" class="LFunction" >SQL.method</a>.</p>
+							<p class="CParagraph">Handles a query based on the &lt;SQL.method&gt;.</p>
 						
 							<!--START_ND_SUMMARY-->
 							<div class="Summary">
@@ -151,7 +150,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 									<table border="0" cellspacing="0" cellpadding="0" class="STable">
 										<tr class="SMain">
 											<td class="SEntry"><a href="#Query" >Query</a></td>
-											<td class="SDescription">Handles a query based on the <a href="SQL-php.html#SQL.method" class="LFunction" >SQL.method</a>.</td>
+											<td class="SDescription">Handles a query based on the &lt;SQL.method&gt;.</td>
 										</tr>
 										<tr class="SGroup SIndent1">
 											<td class="SEntry"><a href="#Query.Variables" >Variables</a></td>
@@ -171,21 +170,25 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#Query.fetchColumn" >fetchColumn</a></td>
-											<td class="SDescription">Fetches a column of the first row.</td>
+											<td class="SDescription">Fetches a column of the current row.</td>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Query.fetch" >fetch</a></td>
-											<td class="SDescription">Returns the first row as an array.</td>
+											<td class="SDescription">Returns the current row as an array.</td>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#Query.fetchObject" >fetchObject</a></td>
-											<td class="SDescription">Returns the first row as an object.</td>
+											<td class="SDescription">Returns the current row as an object.</td>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Query.fetchAll" >fetchAll</a></td>
 											<td class="SDescription">Returns an array of every result.</td>
 										</tr>
 										<tr class="SFunction SIndent2">
+											<td class="SEntry"><a href="#Query.grab" >grab</a></td>
+											<td class="SDescription">Grabs all of the given column out of the full result of a query.</td>
+										</tr>
+										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Query.handle" >handle</a></td>
 											<td class="SDescription">Handles exceptions thrown by failed queries.</td>
 										</tr>
@@ -221,6 +224,12 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 								<table border="0" cellspacing="0" cellpadding="0">
 									<tr>
 										<td class="PBeforeParameters">public function __construct(</td>
+										<td class="PParameter">$sql,</td>
+										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
+										<td class="PDefaultValue"></td>
+										</tr>
+									<tr>
+										<td></td>
 										<td class="PParameter">$query,</td>
 										<td class="PDefaultValuePrefix">&nbsp;&nbsp;</td>
 										<td class="PDefaultValue"></td>
@@ -244,12 +253,20 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
+									<td class="CDLEntry">$sql</td>
+									<td class="CDLDescription"><a href="../common-php.html#SQL" class="LFile" >SQL</a> instance.</td>
+								</tr>
+								<tr>
 									<td class="CDLEntry">$query</td>
 									<td class="CDLDescription">Query to execute.</td>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$params</td>
 									<td class="CDLDescription">An associative array of parameters used in the query.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$throw_exceptions</td>
+									<td class="CDLDescription">Throw exceptions on error?</td>
 								</tr>
 							</table>
 						</div>
@@ -270,7 +287,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 									</tr>
 								</table>
 							</div>
-							<p class="CParagraph">Fetches a column of the first row.</p>
+							<p class="CParagraph">Fetches a column of the current row.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
@@ -285,7 +302,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Query.fetch"></a>fetch</h3>
 						<div class="CBody">
-							<pre>public function fetch()</pre><p class="CParagraph">Returns the first row as an array.</p>
+							<pre>public function fetch()</pre><p class="CParagraph">Returns the current row as an array.</p>
 						</div>
 					</div>
 				</div>
@@ -293,7 +310,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Query.fetchObject"></a>fetchObject</h3>
 						<div class="CBody">
-							<pre>public function fetchObject()</pre><p class="CParagraph">Returns the first row as an object.</p>
+							<pre>public function fetchObject()</pre><p class="CParagraph">Returns the current row as an object.</p>
 						</div>
 					</div>
 				</div>
@@ -318,6 +335,32 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 				</div>
 				<div class="CFunction">
 					<div class="CTopic">
+						<h3 class="CTitle"><a name="Query.grab"></a>grab</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function grab(</td>
+										<td class="PParameter">$column</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Grabs all of the given column out of the full result of a query.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$column</td>
+									<td class="CDLDescription">Name of the column to grab.</td>
+								</tr>
+							</table>
+							<h4 class="CHeading">Returns</h4>
+							<p class="CParagraph">An array of all of the values of that column in the result.</p>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
 						<h3 class="CTitle"><a name="Query.handle"></a>handle</h3>
 						<div class="CBody">
 							<div class="code">
@@ -337,7 +380,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			<a class="toogeneric" href="http://toogeneric.com/">&#42;</a>
+			<a class="toogeneric" href="http://chyrp.net/">&#42;</a>
 			Chyrp &copy; Alex Suraci 2007&mdash;
 		</div>
 	</body>

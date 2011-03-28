@@ -46,10 +46,11 @@
         }
 
         public function index() {
-            $this->display(
-                "extend/index",
-                array("types" => Type::find(array("order" => "id ASC"))),
-                __("Index")
+            $types = Type::find(array("order" => "id ASC"));
+
+            $this->display("extend/index",
+                           array("types" => $types),
+                           __("Index")
             );
         }
 
@@ -350,7 +351,7 @@
             $visitor = Visitor::current();
 
             # Add the MIT license if no license is specified
-            $zip = new ZipArchive;
+            $zip = new ZipArchive();
             if ($zip->open($_FILES['extension']['tmp_name']) === true
                 and $zip->locateName("LICENSE") === false) {
                 $header = "Copyright (c) ".date("Y")." ".oneof($visitor->full_name, $visitor->login);

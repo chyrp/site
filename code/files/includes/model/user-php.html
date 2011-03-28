@@ -4,22 +4,22 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>Chyrp Docs: User</title>
-		<link rel="stylesheet" href="http://chyrp.net/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<link rel="stylesheet" href="http://chyrp.net/css/docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<script src="http://chyrp.net/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/corner.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/docs.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="http://chyrp.net/code/css//main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<link rel="stylesheet" href="http://chyrp.net/code/css//docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="http://chyrp.net/code/js//jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//corner.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//docs.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/mint/?js" type="text/javascript"></script>
 		</head>
 	<body>
 		<h1 id="chyrp">Chyrp</h1>
-		<img id="logo" src="http://chyrp.net/images/logo.png" alt="Chyrp" />
+		<img id="logo" src="http://chyrp.net/code/logo.png" alt="Chyrp" />
 		<ul id="navigation">
 			<li><a href="http://chyrp.net/" title="Home">Home</a></li>
 			<li><a href="http://chyrp.net/extend" title="Extend">Extend</a></li>
 			<li><a href="http://chyrp.net/download" title="Download">Download</a></li>
-			<li><a href="http://chyrp.net/community" title="Community">Community</a></li>
+			<li><a href="http://chyrp.net/discuss" title="Community">Community</a></li>
 			<li class="selected"><a href="http://chyrp.net/code" title="Code">Code</a></li>
 			<li><a href="http://chyrp.net/blog" title="Blog">Blog</a></li>
 		</ul>
@@ -39,7 +39,7 @@
 								<div class="MFile"><a href="../xmlrpc-php.html">XML-RPC</a></div>
 							</div>
 							<div class="MEntry">
-								<div class="MFile"><a href="upgrade-php.html">Upgrader</a></div>
+								<div class="MFile"><a href="../upgrade-php.html">Upgrader</a></div>
 							</div>
 						</div>
 					</div>
@@ -134,8 +134,7 @@
 							</div>
 						</div>
 					</div>
-				</div><script language=JavaScript><!--
-HideAllBut([2, 3, 1, 4], 6);// --></script>
+				</div>
 			</div><!--Menu-->
 			<div id="Content">
 				<div class="CClass">
@@ -181,11 +180,19 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#User.delete" >delete</a></td>
-											<td class="SDescription">Deletes a given user.&nbsp; Calls the &ldquo;delete_user&rdquo; trigger and passes the <a href="#User" class="LClass" >User</a> as an argument.</td>
+											<td class="SDescription">Deletes a given user.&nbsp; Calls the <code class="inline">delete_user</code> trigger and passes the <a href="#User" class="LClass" >User</a> as an argument.</td>
+										</tr>
+										<tr class="SFunction SIndent2 SMarked">
+											<td class="SEntry"><a href="#User.hashPassword" >hashPassword</a></td>
+											<td class="SDescription">Creates a secure hash of a user&rsquo;s password.</td>
+										</tr>
+										<tr class="SFunction SIndent2">
+											<td class="SEntry"><a href="#User.checkPassword" >checkPassword</a></td>
+											<td class="SDescription">Checks a given password against the stored hash.</td>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#User.group" >group</a></td>
-											<td class="SDescription">Returns a user&rsquo;s group.&nbsp; Example: $user-&gt;group()-&gt;can(&ldquo;do_something&rdquo;)</td>
+											<td class="SDescription">Returns a user&rsquo;s group.&nbsp; Example: $user-&gt;group-&gt;can(&ldquo;do_something&rdquo;)</td>
 										</tr>
 										<tr class="SFunction SIndent2">
 											<td class="SEntry"><a href="#User.posts" >posts</a></td>
@@ -194,14 +201,6 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#User.pages" >pages</a></td>
 											<td class="SDescription">Returns all the pages of the user.</td>
-										</tr>
-										<tr class="SFunction SIndent2">
-											<td class="SEntry"><a href="#User.edit_link" >edit_link</a></td>
-											<td class="SDescription">Outputs an edit link for the user, if they can edit_user.</td>
-										</tr>
-										<tr class="SFunction SIndent2 SMarked">
-											<td class="SEntry"><a href="#User.delete_link" >delete_link</a></td>
-											<td class="SDescription">Outputs an delete link for the user, if they can delete_user.</td>
 										</tr>
 									</table>
 								</div>
@@ -297,12 +296,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</tr>
 							</table>
 							<h4 class="CHeading">Returns</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">true</td>
-									<td class="CDLDescription">if a match is found.</td>
-								</tr>
-							</table>
+							<p class="CParagraph"><code class="inline">true</code> or <code class="inline">false</code></p>
 						</div>
 					</div>
 				</div>
@@ -344,13 +338,13 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$joined_at</td>
+										<td class="PParameter">$group_id</td>
 										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
 										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$group_id</td>
+										<td class="PParameter">$joined_at</td>
 										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
 										<td class="PDefaultValue"> null</td>
 										<td class="PAfterParameters">)</td>
@@ -358,7 +352,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</table>
 							</div>
 							<p class="CParagraph">Adds a user to the database with the passed username, password, and e-mail.</p>
-						<p class="CParagraph">Calls the add_user trigger with the inserted ID.</p>
+						<p class="CParagraph">Calls the <code class="inline">add_user</code> trigger with the inserted user.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
@@ -367,7 +361,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$password</td>
-									<td class="CDLDescription">The Password for the new user.&nbsp; Don&rsquo;t MD5 this, it&rsquo;s done in the function.</td>
+									<td class="CDLDescription">The Password for the new user.&nbsp; Don&rsquo;t hash this, it&rsquo;s done in the function.</td>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$email</td>
@@ -375,12 +369,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</tr>
 							</table>
 							<h4 class="CHeading">Returns</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$id</td>
-									<td class="CDLDescription">The newly created users ID.</td>
-								</tr>
-							</table>
+							<p class="CParagraph">The newly created <a href="#User" class="LClass" >User</a>.</p>
 							<h4 class="CHeading">See Also</h4>
 							<p class="CParagraph"><a href="#User.update" class="LFunction" >update</a></p>
 						</div>
@@ -394,27 +383,45 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								<table border="0" cellspacing="0" cellpadding="0">
 									<tr>
 										<td class="PBeforeParameters">public function update(</td>
-										<td class="PParameter">$login,</td>
+										<td class="PParameter">$login</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$password,</td>
+										<td class="PParameter">$password</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$email,</td>
+										<td class="PParameter">$email</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$full_name,</td>
+										<td class="PParameter">$full_name</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
-										<td class="PParameter">$website,</td>
+										<td class="PParameter">$website</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
 										</tr>
 									<tr>
 										<td></td>
 										<td class="PParameter">$group_id</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$joined_at</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null</td>
 										<td class="PAfterParameters">)</td>
 									</tr>
 								</table>
@@ -429,7 +436,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$password</td>
-									<td class="CDLDescription">The new Password to set.</td>
+									<td class="CDLDescription">The new Password to set, already encoded.</td>
 								</tr>
 								<tr>
 									<td class="CDLEntry">$full_name</td>
@@ -466,7 +473,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 									</tr>
 								</table>
 							</div>
-							<p class="CParagraph">Deletes a given user.&nbsp; Calls the &ldquo;delete_user&rdquo; trigger and passes the <a href="#User" class="LClass" >User</a> as an argument.</p>
+							<p class="CParagraph">Deletes a given user.&nbsp; Calls the <code class="inline">delete_user</code> trigger and passes the <a href="#User" class="LClass" >User</a> as an argument.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
@@ -479,9 +486,70 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 				</div>
 				<div class="CFunction">
 					<div class="CTopic">
+						<h3 class="CTitle"><a name="User.hashPassword"></a>hashPassword</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">static function hashPassword(</td>
+										<td class="PParameter">$password</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Creates a secure hash of a user&rsquo;s password.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$password</td>
+									<td class="CDLDescription">The unhashed password.</td>
+								</tr>
+							</table>
+							<h4 class="CHeading">Returns</h4>
+							<p class="CParagraph">The securely hashed password to be stored in the database.</p>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="User.checkPassword"></a>checkPassword</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">static function checkPassword(</td>
+										<td class="PParameter">$password,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$storedHash</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Checks a given password against the stored hash.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$password</td>
+									<td class="CDLDescription">The unhashed password given during a login attempt.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$storedHash</td>
+									<td class="CDLDescription">The stored hash for the user.</td>
+								</tr>
+							</table>
+							<h4 class="CHeading">Returns</h4>
+							<p class="CParagraph"><code class="inline">true</code> or <code class="inline">false</code></p>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
 						<h3 class="CTitle"><a name="User.group"></a>group</h3>
 						<div class="CBody">
-							<pre>public function group()</pre><p class="CParagraph">Returns a user&rsquo;s group.&nbsp; Example: $user-&gt;group()-&gt;can(&ldquo;do_something&rdquo;)</p>
+							<pre>public function group()</pre><p class="CParagraph">Returns a user&rsquo;s group.&nbsp; Example: $user-&gt;group-&gt;can(&ldquo;do_something&rdquo;)</p>
+						<p class="CParagraph">!!&nbsp; DEPRECATED AFTER 2.0 !!</p>
 						</div>
 					</div>
 				</div>
@@ -490,6 +558,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 						<h3 class="CTitle"><a name="User.posts"></a>posts</h3>
 						<div class="CBody">
 							<pre>public function posts()</pre><p class="CParagraph">Returns all the posts of the user.</p>
+						<p class="CParagraph">!!&nbsp; DEPRECATED AFTER 2.0 !!</p>
 						</div>
 					</div>
 				</div>
@@ -498,98 +567,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 						<h3 class="CTitle"><a name="User.pages"></a>pages</h3>
 						<div class="CBody">
 							<pre>public function pages()</pre><p class="CParagraph">Returns all the pages of the user.</p>
-						</div>
-					</div>
-				</div>
-				<div class="CFunction">
-					<div class="CTopic">
-						<h3 class="CTitle"><a name="User.edit_link"></a>edit_link</h3>
-						<div class="CBody">
-							<div class="code">
-								<table border="0" cellspacing="0" cellpadding="0">
-									<tr>
-										<td class="PBeforeParameters">public function edit_link(</td>
-										<td class="PParameter">$text</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$before</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$after</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null</td>
-										<td class="PAfterParameters">)</td>
-									</tr>
-								</table>
-							</div>
-							<p class="CParagraph">Outputs an edit link for the user, if they can edit_user.</p>
-							<h4 class="CHeading">Parameters</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$text</td>
-									<td class="CDLDescription">The text to show for the link.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$before</td>
-									<td class="CDLDescription">If the link can be shown, show this before it.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$after</td>
-									<td class="CDLDescription">If the link can be shown, show this after it.</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div class="CFunction">
-					<div class="CTopic">
-						<h3 class="CTitle"><a name="User.delete_link"></a>delete_link</h3>
-						<div class="CBody">
-							<div class="code">
-								<table border="0" cellspacing="0" cellpadding="0">
-									<tr>
-										<td class="PBeforeParameters">public function delete_link(</td>
-										<td class="PParameter">$text</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$before</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null,</td>
-										</tr>
-									<tr>
-										<td></td>
-										<td class="PParameter">$after</td>
-										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
-										<td class="PDefaultValue"> null</td>
-										<td class="PAfterParameters">)</td>
-									</tr>
-								</table>
-							</div>
-							<p class="CParagraph">Outputs an delete link for the user, if they can delete_user.</p>
-							<h4 class="CHeading">Parameters</h4>
-							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
-								<tr>
-									<td class="CDLEntry">$text</td>
-									<td class="CDLDescription">The text to show for the link.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$before</td>
-									<td class="CDLDescription">If the link can be shown, show this before it.</td>
-								</tr>
-								<tr>
-									<td class="CDLEntry">$after</td>
-									<td class="CDLDescription">If the link can be shown, show this after it.</td>
-								</tr>
-							</table>
+						<p class="CParagraph">!!&nbsp; DEPRECATED AFTER 2.0 !!</p>
 						</div>
 					</div>
 				</div>
@@ -597,7 +575,7 @@ HideAllBut([2, 3, 1, 4], 6);// --></script>
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			<a class="toogeneric" href="http://toogeneric.com/">&#42;</a>
+			<a class="toogeneric" href="http://chyrp.net/">&#42;</a>
 			Chyrp &copy; Alex Suraci 2007&mdash;
 		</div>
 	</body>

@@ -186,13 +186,13 @@
 
             if (!empty($stylesheets))
                 $stylesheets = '<link rel="stylesheet" href="'.
-                               implode('" type="text/css" media="screen" charset="utf-8" /'."\n        ".'<link rel="stylesheet" href="', $stylesheets).
+                               implode('" type="text/css" media="screen" charset="utf-8" /'."\n\t\t".'<link rel="stylesheet" href="', $stylesheets).
                                '" type="text/css" media="screen" charset="utf-8" />';
             else
                 $stylesheets = "";
 
             if (file_exists(THEME_DIR."/style.css"))
-                $stylesheets = '<link rel="stylesheet" href="'.THEME_URL.'/style.css" type="text/css" media="screen" charset="utf-8" />'."\n        ";
+                $stylesheets = '<link rel="stylesheet" href="'.THEME_URL.'/style.css" type="text/css" media="screen" charset="utf-8" />'."\n\t\t";
 
             if (!file_exists(THEME_DIR."/stylesheets/") and !file_exists(THEME_DIR."/css/"))
                 return $stylesheets;
@@ -205,7 +205,7 @@
                 $path = preg_replace("/(.+)\/themes\/(.+)/", "/themes/\\2", $file);
                 $file = basename($file);
 
-                if (substr($file, -8) == ".inc.css" or (substr($file, -4) != ".css" and substr($file, -4) != ".php"))
+                if (substr_count($file, ".inc.css") or (substr($file, -4) != ".css" and substr($file, -4) != ".php"))
                     continue;
 
                 if ($file == "ie.css")
@@ -220,7 +220,7 @@
                 if ($file == "ie.css" or preg_match("/(lt|gt)?ie([0-9\.]+)\.css/", $file))
                     $stylesheets.= "<![endif]-->";
 
-                $stylesheets.= "\n        ";
+                $stylesheets.= "\n\t\t";
             }
 
             return $stylesheets;
@@ -255,7 +255,7 @@
                 $short = (array) glob(THEME_DIR."/js/*.js");
 
                 foreach(array_merge($long, $short) as $file)
-                    if ($file and substr($file, -7) != ".inc.js")
+                    if ($file and !substr_count($file, ".inc.js"))
                         $javascripts.= "\n\t\t".'<script src="'.$config->chyrp_url.'/includes/lib/gz.php?file='.preg_replace("/(.+)\/themes\/(.+)/", "/themes/\\2", $file).'" type="text/javascript" charset="utf-8"></script>';
 
                 $long  = (array) glob(THEME_DIR."/javascripts/*.php");

@@ -106,6 +106,7 @@
          */
         public function write_post() {
             $visitor = Visitor::current();
+
             if (!$visitor->group->can("add_post", "add_draft"))
                 show_403(__("Access Denied"), __("You do not have sufficient privileges to create posts."));
 
@@ -116,7 +117,7 @@
 
             Trigger::current()->filter($options, array("write_post_options", "post_options"));
 
-            fallback($_GET['feather'], $config->enabled_feathers[0]);
+            fallback($_GET['feather'], reset($config->enabled_feathers));
 
             $this->display("write_post",
                            array("groups" => Group::find(array("order" => "id ASC")),
@@ -531,6 +532,10 @@
             elseif (!preg_match("/^[_A-z0-9-]+((\.|\+)[_A-z0-9-]+)*@[A-z0-9-]+(\.[A-z0-9-]+)*(\.[A-z]{2,4})$/", $_POST['email']))
                 error(__("Error"), __("Invalid e-mail address."));
 
+            if (!empty($_POST['website']) and strpos($_POST['website'], '://') === false) {
+                $_POST['website'] = 'http://' . $_POST['website'];
+            }
+
             User::add($_POST['login'],
                       $_POST['password1'],
                       $_POST['email'],
@@ -581,7 +586,6 @@
                 Flash::notice(_f("Login &#8220;%s&#8221; is already in use.", array($_POST['login'])),
                               "/admin/?action=edit_user&id=".$_POST['id']);
 
-
             $user = new User($_POST['id']);
 
             if ($user->no_results)
@@ -591,7 +595,11 @@
                             User::hashPassword($_POST['new_password1']) :
                             $user->password ;
 
-            $user->update($_POST['login'], $password, $_POST['email'], $_POST['full_name'], $_POST['website'], $_POST['group']);
+            $website = (!empty($_POST['website']) and strpos($_POST['website'], '://') === false) ?
+                           $_POST['website'] = 'http://' . $_POST['website'] :
+                           $_POST['website'] ;
+
+            $user->update($_POST['login'], $password, $_POST['email'], $_POST['full_name'], $website, $_POST['group']);
 
             if ($_POST['id'] == $visitor->id)
                 $_SESSION['password'] = $password;
@@ -1218,7 +1226,7 @@
                                          "<wp:meta_value>\\1&amp;\\2</wp:meta_value>",
                                          $sane_xml, -1, $fix_amps_count);
 
-            # Remove null (x00) characyers
+            # Remove null (x00) characters
             $sane_xml = str_replace("", "", $sane_xml);
 
             $xml = simplexml_load_string($sane_xml, "SimpleXMLElement", LIBXML_NOCDATA);
@@ -1245,6 +1253,8 @@
 
                 $clean = (isset($wordpress->post_name)) ? $wordpress->post_name : sanitize($item->title) ;
 
+                $pinned = (isset($wordpress->is_sticky)) ? $wordpress->is_sticky : 0 ;
+
                 if (empty($wordpress->post_type) or $wordpress->post_type == "post") {
                     $status_translate = array("publish" => "public",
                                               "draft"   => "draft",
@@ -1264,7 +1274,7 @@
                                       Post::check_url($clean),
                                       "text",
                                       null,
-                                      false,
+                                      $pinned,
                                       $status_translate[(string) $wordpress->status],
                                       (string) ($wordpress->post_date == "0000-00-00 00:00:00" ? datetime() : $wordpress->post_date),
                                       null,
@@ -1324,8 +1334,8 @@
             $xml = simplexml_load_string($api);
 
             if (!isset($xml->tumblelog))
-                Flash::warning(__("The URL you specified does not seem to be a valid Tumblr site."),
-                               "/admin/?action=import");
+                Flash::warning(_f("Content could not be retrieved from the given URL. ". get_remote($url)),
+                                  "/admin/?action=import");
 
             $already_in = $posts = array();
             foreach ($xml->posts->post as $post) {
@@ -1356,7 +1366,7 @@
             foreach ($posts as $key => $post) {
                 set_time_limit(3600);
                 if ($post->attributes()->type == "audio")
-                    continue; # Can't import Audio posts since Tumblr has the files locked in to Amazon.
+                    break; # Can't import Audio posts since Tumblr has the files locked in to Amazon.
 
                 $translate_types = array("regular" => "text", "conversation" => "chat");
 
@@ -1408,7 +1418,7 @@
                                       Post::check_url($clean),
                                       fallback($translate_types[(string) $post->attributes()->type], (string) $post->attributes()->type),
                                       null,
-                                      false,
+                                      null,
                                       "public",
                                       datetime((int) $post->attributes()->unix_timestamp),
                                       null,
@@ -1824,8 +1834,8 @@
 
                 $this->context["admin_themes"][] = array("name" => $folder,
                                                          "screenshot" => (file_exists(ADMIN_THEMES_DIR."/".$folder."/screenshot.png") ?
-                                                                              $config->chyrp_url."/admin/themes/".$folder."/screenshot.png" :
-                                                                              ""),
+                                                         $config->chyrp_url."/admin/themes/".$folder."/screenshot.png" :
+                                                         ""),
                                                          "info" => $info);
             }
 
@@ -2223,13 +2233,13 @@
                                                                "selected" => array("edit_page", "delete_page")),
                                       "manage_users"  => array("title" => __("Users"),
                                                                "show" => ($visitor->group->can("add_user",
-                                                                                                 "edit_user",
-                                                                                                 "delete_user")),
+                                                                                               "edit_user",
+                                                                                               "delete_user")),
                                                                "selected" => array("edit_user", "delete_user", "new_user")),
                                       "manage_groups" => array("title" => __("Groups"),
                                                                "show" => ($visitor->group->can("add_group",
-                                                                                                 "edit_group",
-                                                                                                 "delete_group")),
+                                                                                               "edit_group",
+                                                                                               "delete_group")),
                                                                "selected" => array("edit_group", "delete_group", "new_group")));
             $trigger->filter($subnav["manage"], "manage_nav");
 

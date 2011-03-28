@@ -4,22 +4,22 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>Chyrp Docs: Model</title>
-		<link rel="stylesheet" href="http://chyrp.net/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<link rel="stylesheet" href="http://chyrp.net/css/docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-		<script src="http://chyrp.net/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/corner.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="http://chyrp.net/js/docs.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="http://chyrp.net/code/css//main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<link rel="stylesheet" href="http://chyrp.net/code/css//docs.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="http://chyrp.net/code/js//jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//corner.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://chyrp.net/code/js//docs.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/mint/?js" type="text/javascript"></script>
 		</head>
 	<body>
 		<h1 id="chyrp">Chyrp</h1>
-		<img id="logo" src="http://chyrp.net/images/logo.png" alt="Chyrp" />
+		<img id="logo" src="http://chyrp.net/code/logo.png" alt="Chyrp" />
 		<ul id="navigation">
 			<li><a href="http://chyrp.net/" title="Home">Home</a></li>
 			<li><a href="http://chyrp.net/extend" title="Extend">Extend</a></li>
 			<li><a href="http://chyrp.net/download" title="Download">Download</a></li>
-			<li><a href="http://chyrp.net/community" title="Community">Community</a></li>
+			<li><a href="http://chyrp.net/discuss" title="Community">Community</a></li>
 			<li class="selected"><a href="http://chyrp.net/code" title="Code">Code</a></li>
 			<li><a href="http://chyrp.net/blog" title="Blog">Blog</a></li>
 		</ul>
@@ -39,7 +39,7 @@
 								<div class="MFile"><a href="../xmlrpc-php.html">XML-RPC</a></div>
 							</div>
 							<div class="MEntry">
-								<div class="MFile"><a href="upgrade-php.html">Upgrader</a></div>
+								<div class="MFile"><a href="../upgrade-php.html">Upgrader</a></div>
 							</div>
 						</div>
 					</div>
@@ -134,8 +134,7 @@
 							</div>
 						</div>
 					</div>
-				</div><script language=JavaScript><!--
-HideAllBut([4, 5, 3, 2], 6);// --></script>
+				</div>
 			</div><!--Menu-->
 			<div id="Content">
 				<div class="CClass">
@@ -158,12 +157,32 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 											<td class="SDescription"></td>
 										</tr>
 										<tr class="SVariable SIndent2 SMarked">
-											<td class="SEntry"><a href="#Model.$loaded_models" >$loaded_models</a></td>
-											<td class="SDescription">Caches every loaded module into an array of results.</td>
+											<td class="SEntry"><a href="#Model.$caches" >$caches</a></td>
+											<td class="SDescription">Caches every loaded module into a clone of the object.</td>
+										</tr>
+										<tr class="SVariable SIndent2">
+											<td class="SEntry"><a href="#Model.$belongs_to" >$belongs_to</a></td>
+											<td class="SDescription">An array of models that this Model belongs to.&nbsp; This model should have a [modelname]_id column.</td>
+										</tr>
+										<tr class="SVariable SIndent2 SMarked">
+											<td class="SEntry"><a href="#Model.$has_many" >$has_many</a></td>
+											<td class="SDescription">An array of models that belong to this Model.&nbsp; They should have a [thismodel]_id column.</td>
+										</tr>
+										<tr class="SVariable SIndent2">
+											<td class="SEntry"><a href="#Model.$has_one" >$has_one</a></td>
+											<td class="SDescription">An array of models that this model has only one of.&nbsp; The models should have a [thismodel]_id column.</td>
 										</tr>
 										<tr class="SGroup SIndent1">
 											<td class="SEntry"><a href="#Model.Functions" >Functions</a></td>
 											<td class="SDescription"></td>
+										</tr>
+										<tr class="SFunction SIndent2 SMarked">
+											<td class="SEntry"><a href="#Model.__get" >__get</a></td>
+											<td class="SDescription">Automatically handle model relationships when grabbing attributes of an object.</td>
+										</tr>
+										<tr class="SFunction SIndent2">
+											<td class="SEntry"><a href="#Model.__getPlaceholders" >__getPlaceholders</a></td>
+											<td class="SDescription">Calls __get with the requested $name, but grabs everything as placeholders.</td>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Model.grab" >grab</a></td>
@@ -175,7 +194,23 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 										</tr>
 										<tr class="SFunction SIndent2 SMarked">
 											<td class="SEntry"><a href="#Model.delete" >delete</a></td>
-											<td class="SDescription">Deletes a given object.&nbsp; Calls the &ldquo;delete_(model)&rdquo; trigger with the objects ID.</td>
+											<td class="SDescription">Deletes a given object.&nbsp; Calls the <code class="inline">delete_(model)</code> trigger with the objects ID.</td>
+										</tr>
+										<tr class="SFunction SIndent2">
+											<td class="SEntry"><a href="#Model.deletable" >deletable</a></td>
+											<td class="SDescription">Checks if the <a href="../common-php.html#User" class="LFile" >User</a> can delete the post.</td>
+										</tr>
+										<tr class="SFunction SIndent2 SMarked">
+											<td class="SEntry"><a href="#Model.editable" >editable</a></td>
+											<td class="SDescription">Checks if the <a href="../common-php.html#User" class="LFile" >User</a> can edit the post.</td>
+										</tr>
+										<tr class="SFunction SIndent2">
+											<td class="SEntry"><a href="#Model.edit_link" >edit_link</a></td>
+											<td class="SDescription">Outputs an edit link for the model, if the visitor&rsquo;s <a href="../model/Group-php.html#Group.can" class="LFunction" >Group.can</a> edit_[model].</td>
+										</tr>
+										<tr class="SFunction SIndent2 SMarked">
+											<td class="SEntry"><a href="#Model.delete_link" >delete_link</a></td>
+											<td class="SDescription">Outputs a delete link for the post, if the &lt;User.can&gt; delete_[model].</td>
 										</tr>
 									</table>
 								</div>
@@ -191,15 +226,83 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 				</div>
 				<div class="CVariable">
 					<div class="CTopic">
-						<h3 class="CTitle"><a name="Model.$loaded_models"></a>$loaded_models</h3>
+						<h3 class="CTitle"><a name="Model.$caches"></a>$caches</h3>
 						<div class="CBody">
-							<pre>static $loaded_models</pre><p class="CParagraph">Caches every loaded module into an array of results.</p></div>
+							<pre>static $caches</pre><p class="CParagraph">Caches every loaded module into a clone of the object.</p></div>
+					</div>
+				</div>
+				<div class="CVariable">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.$belongs_to"></a>$belongs_to</h3>
+						<div class="CBody">
+							<pre>public $belongs_to</pre><p class="CParagraph">An array of models that this Model belongs to.&nbsp; This model should have a [modelname]_id column.</p></div>
+					</div>
+				</div>
+				<div class="CVariable">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.$has_many"></a>$has_many</h3>
+						<div class="CBody">
+							<pre>public $has_many</pre><p class="CParagraph">An array of models that belong to this Model.&nbsp; They should have a [thismodel]_id column.</p></div>
+					</div>
+				</div>
+				<div class="CVariable">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.$has_one"></a>$has_one</h3>
+						<div class="CBody">
+							<pre>public $has_one</pre><p class="CParagraph">An array of models that this model has only one of.&nbsp; The models should have a [thismodel]_id column.</p></div>
 					</div>
 				</div>
 				<div class="CGroup">
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Model.Functions"></a>Functions</h3>
 						</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.__get"></a>__get</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function __get(</td>
+										<td class="PParameter">$name</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Automatically handle model relationships when grabbing attributes of an object.</p>
+							<h4 class="CHeading">Returns</h4>
+							<p class="CParagraph"><code class="inline">mixed</code></p>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.__getPlaceholders"></a>__getPlaceholders</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function __getPlaceholders(</td>
+										<td class="PParameter">$name</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Calls __get with the requested $name, but grabs everything as placeholders.</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$name</td>
+									<td class="CDLDescription">Name to call <a href="#Model.__get" class="LFunction" >Model.__get</a> with.</td>
+								</tr>
+							</table>
+							<h4 class="CHeading">Returns</h4>
+							<p class="CParagraph"><code class="inline">mixed</code></p>
+							<h4 class="CHeading">See Also</h4>
+							<p class="CParagraph"><a href="#Model.__get" class="LFunction" >Model.__get</a></p>
+						</div>
+					</div>
 				</div>
 				<div class="CFunction">
 					<div class="CTopic">
@@ -373,7 +476,7 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 					<div class="CTopic">
 						<h3 class="CTitle"><a name="Model.delete"></a>delete</h3>
 						<div class="CBody">
-							<p class="CParagraph">Deletes a given object.&nbsp; Calls the &ldquo;delete_(model)&rdquo; trigger with the objects ID.</p>
+							<p class="CParagraph">Deletes a given object.&nbsp; Calls the <code class="inline">delete_(model)</code> trigger with the objects ID.</p>
 							<h4 class="CHeading">Parameters</h4>
 							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
 								<tr>
@@ -388,11 +491,161 @@ HideAllBut([4, 5, 3, 2], 6);// --></script>
 						</div>
 					</div>
 				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.deletable"></a>deletable</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function deletable(</td>
+										<td class="PParameter">$user</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Checks if the <a href="../common-php.html#User" class="LFile" >User</a> can delete the post.</p>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.editable"></a>editable</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function editable(</td>
+										<td class="PParameter">$user</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Checks if the <a href="../common-php.html#User" class="LFile" >User</a> can edit the post.</p>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.edit_link"></a>edit_link</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function edit_link(</td>
+										<td class="PParameter">$text</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$before</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$after</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$classes</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> &quot;&quot;</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Outputs an edit link for the model, if the visitor&rsquo;s <a href="../model/Group-php.html#Group.can" class="LFunction" >Group.can</a> edit_[model].</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$text</td>
+									<td class="CDLDescription">The text to show for the link.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$before</td>
+									<td class="CDLDescription">If the link can be shown, show this before it.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$after</td>
+									<td class="CDLDescription">If the link can be shown, show this after it.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$classes</td>
+									<td class="CDLDescription">Extra CSS classes for the link, space-delimited.</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="CFunction">
+					<div class="CTopic">
+						<h3 class="CTitle"><a name="Model.delete_link"></a>delete_link</h3>
+						<div class="CBody">
+							<div class="code">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="PBeforeParameters">public function delete_link(</td>
+										<td class="PParameter">$text</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$before</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$after</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> null,</td>
+										</tr>
+									<tr>
+										<td></td>
+										<td class="PParameter">$classes</td>
+										<td class="PDefaultValuePrefix">&nbsp;=&nbsp;</td>
+										<td class="PDefaultValue"> &quot;&quot;</td>
+										<td class="PAfterParameters">)</td>
+									</tr>
+								</table>
+							</div>
+							<p class="CParagraph">Outputs a delete link for the post, if the &lt;User.can&gt; delete_[model].</p>
+							<h4 class="CHeading">Parameters</h4>
+							<table border="0" cellspacing="0" cellpadding="0" class="CDescriptionList">
+								<tr>
+									<td class="CDLEntry">$text</td>
+									<td class="CDLDescription">The text to show for the link.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$before</td>
+									<td class="CDLDescription">If the link can be shown, show this before it.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$after</td>
+									<td class="CDLDescription">If the link can be shown, show this after it.</td>
+								</tr>
+								<tr>
+									<td class="CDLEntry">$classes</td>
+									<td class="CDLDescription">Extra CSS classes for the link, space-delimited.</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div><!--Content-->
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			<a class="toogeneric" href="http://toogeneric.com/">&#42;</a>
+			<a class="toogeneric" href="http://chyrp.net/">&#42;</a>
 			Chyrp &copy; Alex Suraci 2007&mdash;
 		</div>
 	</body>
