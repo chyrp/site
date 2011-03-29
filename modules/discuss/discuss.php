@@ -15,7 +15,7 @@
                              id INTEGER PRIMARY KEY AUTO_INCREMENT,
                              name VARCHAR(100) DEFAULT '',
                              description TEXT,
-                             `order` INTEGER DEFAULT 0,
+                             `order`  INTEGER DEFAULT 0,
                              clean VARCHAR(100) DEFAULT '',
                              url VARCHAR(100) DEFAULT ''
                          ) DEFAULT CHARSET=utf8");
@@ -146,7 +146,7 @@
             if (!Visitor::current()->group->can("add_forum"))
                 show_403(__("Access Denied"), __("You do not have sufficient privileges to add forums.", "discuss"));
 
-            Forum::add($_POST['name'], $_POST['description']);
+            Forum::add($_POST['name'], $_POST['description'], $_POST['order']);
             Flash::notice(__("Forum added.", "discuss"), "/admin/?action=manage_forums");
         }
 

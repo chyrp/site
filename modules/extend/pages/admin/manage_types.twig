@@ -29,14 +29,14 @@
                         <td>${ type.extension_count }</td>
                         ${ trigger.call("manage_types_column", type) }
                         {% if type.editable and type.deletable %}
-                        <td class="controls">${ type.edit_link('<img src="$theme_url/images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
-                        <td class="controls">${ type.delete_link('<img src="$theme_url/images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
+                        <td class="controls">${ type.edit_link('<img src="themes/default/images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
+                        <td class="controls">${ type.delete_link('<img src="themes/default/images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
                         {% elseif type.editable or type.deletable %}
                         {% if visitor.group.can("edit_aggregate") %}
-                        <td class="controls">${ type.edit_link('<img src="$theme_url/images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
+                        <td class="controls">${ type.edit_link('<img src="themes/default/images/icons/edit.png" alt="edit" />'~ ("edit" | translate)) }</td>
                         {% endif %}
                         {% if visitor.group.can("delete_aggregate") %}
-                        <td class="controls">${ type.delete_link('<img src="$theme_url/images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
+                        <td class="controls">${ type.delete_link('<img src="themes/default/images/icons/delete.png" alt="delete" />'~ ("delete" | translate)) }</td>
                         {% endif %}
                         {% endif %}
                     </tr>

@@ -1,23 +1,23 @@
 {% extends "layout.twig" %}
 
-{% block title %}${ "Edit Milestone" | translate("progress") }{% endblock %}
+{% block title %}${ "Edit Type" | translate("progress") }{% endblock %}
 
 {% block content %}
-            ${ milestone.delete_link('<img src="$theme_url/images/icons/delete.png" alt="delete" />'~ ("Delete" | translate), null, null, "button boo right") }
-            <h1>${ "Edit Milestone &#8220;%s&#8221;" | translate("progress") | format(milestone.name) }</h1>
-            <form id="edit_milestone" class="split" action="{% admin "update_milestone" %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+            ${ type.delete_link('<img src="themes/default/images/icons/delete.png" alt="delete" />'~ ("Delete" | translate), null, null, "button boo right") }
+            <h1>${ "Edit Type &#8220;%s&#8221;" | translate("extend") | format(type.name) }</h1>
+            <form id="edit_type" class="split" action="{% admin "update_type" %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                 <fieldset>
                     <p>
-                        <label for="name">${ "Name" | translate("progress") }</label>
-                        <input class="text" type="text" name="name" value="${ milestone.name | escape }" id="name" />
+                        <label for="name">${ "Name" | translate("extend") }</label>
+                        <input class="text" type="text" name="name" value="${ type.name | escape }" id="name" />
                     </p>
                     <p>
-                        <label for="description">${ "Description" | translate("progress") }</label>
-                        <textarea class="description" name="description" rows="9" cols="50" id="description">${ milestone.description | escape }</textarea>
+                        <label for="description">${ "Description" | translate("extend") }</label>
+                        <textarea class="description" name="description" rows="9" cols="50" id="description">${ type.description | escape }</textarea>
                     </p>
                     <p>
                         <label for="due">${ "Due" | translate("progress") }</label>
-                        <input class="text code" type="text" name="due" value="${ milestone.due | strftime }" id="due" />
+                        <input class="text" type="text" name="color" value="${ type.color | translate('extend') }" id="color" />
                         <span class="sub">(<a href="http://php.net/strtotime">strtotime</a>-compatible)</span>
                     </p>
 

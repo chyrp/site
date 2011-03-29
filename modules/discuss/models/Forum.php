@@ -84,7 +84,7 @@
             $sql->insert("forums",
                          array("name" => $name,
                                "description" => $description,
-                               "order" => $order,
+                               "order " => $order,
                                "clean" => sanitize($name),
                                "url" => self::check_url(sanitize($name))));
 
@@ -121,7 +121,7 @@
                          array("id"          => $this->id),
                          array("name"        => $this->name,
                                "description" => $this->description,
-                               "order"       => $this->order));
+                               "order "      => $this->order));
 
 			if (module_enabled("cacher"))
 			    Modules::$instances["cacher"]->regenerate();
@@ -243,7 +243,7 @@
             return new Message(null, array("left_join" => array(array("table" => "topics",
                                                                       "where" => array("topics.id = messages.topic_id",
                                                                                        "forum_id" => $this->id))),
-                                                                      "order" => array("created_at DESC", "id DESC")));
+                                                                      "order " => array("created_at DESC", "id DESC")));
         }
 
         /**
@@ -255,7 +255,7 @@
                 return $this->latest_topic;
 
             return $this->latest_topic = new Topic(null, array("where" => array("forum_id" => $this->id),
-                                                               "order" => "created_at DESC, id DESC"));
+                                                               "order " => "created_at DESC, id DESC"));
         }
 
         /**
