@@ -8,3 +8,4 @@ themes/*
 !themes/stardust
 releases
 old
+.git

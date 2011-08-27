@@ -228,19 +228,19 @@ form.search {
     }
     #navigation li.selected.fourth,
     #navigation li.fourth:hover {
-        background: #caff2a;
+        background: #1fb5ff;
     }
     #navigation li.selected.fifth,
     #navigation li.fifth:hover {
-        background: #1fb5ff;
+        background: #5931ff;
     }
     #navigation li.selected.sixth,
     #navigation li.sixth:hover {
-        background: #5931ff;
+        background: #b848ff;
     }
     #navigation li.selected.seventh,
     #navigation li.seventh:hover {
-        background: #b848ff;
+        background: #caff2a;
     }
     #navigation li.first {
         color: #ff2e99;
@@ -261,28 +261,28 @@ form.search {
             margin-left: -119px;
     }
     #navigation li.fourth {
-        color: #caff2a;
+        color: #1fb5ff;
         width: 66px;
         }
         #navigation li.fourth h1 {
             margin-left: -180px;
     }
     #navigation li.fifth {
-        color: #1fb5ff;
+        color: #5931ff;
         width: 55px;
         }
         #navigation li.fifth h1 {
             margin-left: -246px;
     }
     #navigation li.sixth {
-        color: #5931ff;
+        color: #b848ff;
         width: 44px;
         }
         #navigation li.sixth h1 {
             margin-left: -301px;
     }
     #navigation li.seventh {
-        color: #b848ff;
+        color: #caff2a;
         width: 41px;
         }
         #navigation li.seventh h1 {
@@ -317,6 +317,7 @@ form.search {
     margin: 0 0 2em;
     color: #777;
     line-height: 2.5em;
+    border: 1px solid #1c1c1c;
     }
     #breadcrumb .right span {
         padding: 0 .75em;
@@ -354,6 +355,7 @@ form.search {
             background: #0d0d0d;
             padding: .75em;
             display: block;
+            border: 1px solid #1c1c1c;
         }
         #discuss .forum .info,
         #discuss .topic .info,
@@ -428,6 +430,7 @@ form.search {
     }
     #discuss .post {
         margin: 0 0 1em;
+        border-bottom: 1px solid #1c1c1c;
     }
     #discuss .details {
         float: left;
@@ -1004,6 +1007,7 @@ div#controls ul li.close a:hover {
     padding: 1em;
     margin-bottom: 1.5em;
     display: block;
+    border: 1px solid #1c1c1c;
 }
 form.donate input {
     margin: 0 0 1em;

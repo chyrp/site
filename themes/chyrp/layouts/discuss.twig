@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-type" content="$theme.type; charset=utf-8" />
-        <title>{% block title %}{% if title %}${ title | escape } &mdash; {% endif %}$site.name: Discuss{% endblock %}</title>
+        <title>{% block title %}$site.name &#8250; Discuss {% if title %} &#8250; ${ title | escape } {% endif %}{% endblock %}</title>
         <meta name="generator" content="Chyrp" />
         <meta name="description" content="$site.description" />
         <link rel="shortcut icon" href="$site.url/favicon.ico" />
@@ -54,15 +54,15 @@ ${ trigger.call("head") }
                 <h1><a href="$site.url">Chyrp:&nbsp;Discuss</a></h1>
                 <a href="{% url "index" in Discuss %}">Discuss</a>
             </li>
-            <li class="fifth">
+            <li class="fourth">
                 <h1><a href="$site.url">Chyrp:&nbsp;Discuss</a></h1>
                 <a href="{% url "index" in Extend %}">Extend</a>
             </li>
-            <li class="sixth">
+            <li class="fifth">
                 <h1><a href="$site.url">Chyrp:&nbsp;Discuss</a></h1>
                 <a href="{% url "code" in Main %}">Code</a>
             </li>
-            <li class="seventh">
+            <li class="sixth">
                 <h1><a href="$site.url">Chyrp:&nbsp;Discuss</a></h1>
                 <a href="{% url "blog" in Main %}">Blog</a>
             </li>

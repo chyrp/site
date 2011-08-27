@@ -26,6 +26,7 @@
     define('MODULES_DIR',  MAIN_DIR."/modules");
     define('FEATHERS_DIR', MAIN_DIR."/feathers");
     define('THEMES_DIR',   MAIN_DIR."/themes");
+    define('USE_ZLIB',     true);
 
     if (!AJAX and
         extension_loaded("zlib") and

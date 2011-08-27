@@ -437,10 +437,11 @@
      * Parameters:
      *     $string - String to fix.
      *     $quotes - Encode quotes?
+     *     $double - Encode encoded?
      */
-    function fix($string, $quotes = false) {
+    function fix($string, $quotes = false, $double = false) {
         $quotes = ($quotes) ? ENT_QUOTES : ENT_NOQUOTES ;
-        return htmlspecialchars($string, $quotes, "utf-8");
+        return htmlspecialchars($string, $quotes, "utf-8", $double);
     }
 
     /**
@@ -1088,7 +1089,7 @@
 
         if (ini_get("allow_url_fopen")) {
             $content = @file_get_contents($url);
-            if ($http_response_header[0] != "HTTP/1.1 200 OK")
+            if (!strpos($http_response_header[0], " 200 OK"))
                 $content = "Server returned a message: $http_response_header[0]";
         } elseif (function_exists("curl_init")) {
             $handle = curl_init();

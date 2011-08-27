@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-type" content="$theme.type; charset=utf-8" />
-        <title>{% block title %}{% if title %}${ title | escape } &mdash; {% endif %}$site.name{% endblock %}</title>
+        <title>{% block title %}$site.name &#8250; {% if title %}${ title | escape }{% endif %}{% endblock %}</title>
         <meta name="generator" content="Chyrp" />
         <meta name="description" content="$site.description" />
         <link rel="shortcut icon" href="$site.url/favicon.ico" />
@@ -54,22 +54,22 @@ ${ trigger.call("head") }
                 <h1><a href="$site.url">Chyrp</a></h1>
                 <a href="{% url "index" in Discuss %}">Discuss</a>
             </li>
-            <li class="fifth">
+            <li class="fourth">
                 <h1><a href="$site.url">Chyrp</a></h1>
                 <a href="{% url "index" in Extend %}">Extend</a>
             </li>
-            <li class="sixth">
+            <li class="fifth">
                 <h1><a href="$site.url">Chyrp</a></h1>
                 <a href="{% url "code" in Main %}">Code</a>
             </li>
-            <li class="seventh${ true | selected(route.action != "home" and route.action != "download", true) }">
+            <li class="sixth${ true | selected(route.action != "home" and route.action != "download", true) }">
                 <h1><a href="$site.url">Chyrp</a></h1>
                 <a href="{% url "blog" in Main %}">Blog</a>
             </li>
         </ul>
 
         <div id="content">
-            <div class="flash warning">Chyrp 2.1 RC is here. <a href="http://chyrp.net/2011/03/26/chyrp-21-rc-the-pre-final-release/">More info &rarr;</a></div>
+            <div class="flash warning">Chyrp 2.1 Final Released. <a href="http://chyrp.net/2011/04/01/chyrp-21-final-released/">Read more &rarr;</a></div>
         {% for type, messages in flash.all | items %}
             {% for message in messages %}
             <div class="flash ${ type | depluralize }">$message</div>
