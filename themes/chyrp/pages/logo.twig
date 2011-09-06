@@ -1,0 +1,17 @@
+{% extends "layouts/default.twig" %}
+
+{% block title %}
+Chyrp: Logo
+{% endblock %}
+
+{% block content %}
+<h1>Chyrp's Logo</h1>
+<img class="chyrp-logo" src="${ "chyrp-logo-alpha.png" | uploaded }" />
+<p class="logo-blurb blurb">
+    Chyrp's logo was created in 2008 by Ollie Relph for the project. It is licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0</a>.
+</p>
+<ul class="sources">
+    <li><a href="${ "chyrp-logo-alpha.png" | uploaded }">PNG</a></li>
+    <li><a href="${ "chyrp-logo.psd" | uploaded }">Vector PSD</a></li>
+</ul>
+{% endblock %}
