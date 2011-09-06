@@ -121,7 +121,7 @@
                          array("id"          => $this->id),
                          array("name"        => $this->name,
                                "description" => $this->description,
-                               "order "      => $this->order));
+                               "order ="      => $this->order));
 
 			if (module_enabled("cacher"))
 			    Modules::$instances["cacher"]->regenerate();

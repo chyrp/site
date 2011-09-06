@@ -180,7 +180,7 @@
             if (!$forum->editable())
                 show_403(__("Access Denied"), __("You do not have sufficient privileges to edit this forum.", "discuss"));
 
-            $forum->update($_POST['name'], $_POST['description']);
+            $forum->update($_POST['name'], $_POST['description'], $_POST['order']);
 
             Flash::notice(__("Forum updated.", "discuss"), "/admin/?action=manage_forums");
         }
