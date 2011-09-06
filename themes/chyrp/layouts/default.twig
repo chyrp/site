@@ -5,6 +5,7 @@
         <title>{% block title %}$site.name &#8250; {% if title %}${ title | escape }{% endif %}{% endblock %}</title>
         <meta name="generator" content="Chyrp" />
         <meta name="description" content="$site.description" />
+        <meta name="robots" content="index,follow" />
         <link rel="shortcut icon" href="$site.url/favicon.ico" />
         <link rel="pingback" href="$site.chyrp_url/includes/xmlrpc.php" />
         <link rel="EditURI" type="application/rsd+xml" href="$site.chyrp_url/includes/rsd.php" />
@@ -43,33 +44,33 @@ ${ trigger.call("head") }
 
         <ul id="navigation">
             <li class="first${ "home" | selected(route.action, true) }">
-                <h1><a href="$site.url">Chyrp</a></h1>
+                <h2><a href="$site.url">Chyrp</a></h2>
                 <a href="$site.url">Home</a>
             </li>
             <li class="second${ "download" | selected(route.action, true) }">
-                <h1><a href="$site.url">Chyrp</a></h1>
+                <h2><a href="$site.url">Chyrp</a></h2>
                 <a href="{% url "download" in Main %}">Download</a>
             </li>
             <li class="third">
-                <h1><a href="$site.url">Chyrp</a></h1>
+                <h2><a href="$site.url">Chyrp</a></h2>
                 <a href="{% url "index" in Discuss %}">Discuss</a>
             </li>
             <li class="fourth">
-                <h1><a href="$site.url">Chyrp</a></h1>
+                <h2><a href="$site.url">Chyrp</a></h2>
                 <a href="{% url "index" in Extend %}">Extend</a>
             </li>
             <li class="fifth">
-                <h1><a href="$site.url">Chyrp</a></h1>
+                <h2><a href="$site.url">Chyrp</a></h2>
                 <a href="{% url "code" in Main %}">Code</a>
             </li>
             <li class="sixth${ true | selected(route.action != "home" and route.action != "download", true) }">
-                <h1><a href="$site.url">Chyrp</a></h1>
+                <h2><a href="$site.url">Chyrp</a></h2>
                 <a href="{% url "blog" in Main %}">Blog</a>
             </li>
         </ul>
 
         <div id="content">
-            <div class="flash warning">Chyrp 2.1 Final Released. <a href="http://chyrp.net/2011/04/01/chyrp-21-final-released/">Read more &rarr;</a></div>
+            <!--<div class="flash warning">Chyrp 2.1 Final Released. <a href="http://chyrp.net/2011/04/01/chyrp-21-final-released/">Read more &rarr;</a></div>-->
         {% for type, messages in flash.all | items %}
             {% for message in messages %}
             <div class="flash ${ type | depluralize }">$message</div>
@@ -80,9 +81,8 @@ ${ trigger.call("head") }
 
         <ul id="footer">
             <li class="toogeneric"><a href="http://chyrp.net/">*</a></li>
-            <li>Chyrp &copy; 2011 &mdash;</li>
-            <li>${ "Powered by <a class=\"chyrp\" href=\"http://chyrp.net/\">Chyrp</a>" | translate }</li>
-            <li><a class="atom" href="{% url "feed" %}">atom</a></li>
+            <li>${ "Powered by <a class=\"chyrp\" href=\"http://chyrp.net/\">Chyrp</a>" | translate } &copy; 2011 &mdash; <a class="atom" href="{% url "feed" %}">atom</a></li>
+            <iframe src="http://www.facebook.com/plugins/like.php?app_id=261610940518826&amp;href=http%3A%2F%2Fwww.facebook.com%2FChyrp&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=dark&amp;font=lucida+grande&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
         </ul>
 
         {% if debug and visitor.group.name == "Admin" %}

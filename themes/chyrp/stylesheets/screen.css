@@ -198,15 +198,17 @@ form.search {
             color: inherit;
             padding: .5em;
         }
-        #navigation li h1 {
+        #navigation li h2 {
             border: none;
             font-size: 3.5em;
             font-weight: bold;
             color: inherit;
             display: block;
             text-align: left;
+            margin-bottom: .3em;
+            line-height: 1.25em;
         }
-        #navigation li h1 a {
+        #navigation li h2 a {
             color: inherit;
             padding: 0;
     }
@@ -250,42 +252,42 @@ form.search {
         color: #ff8a2d;
         width: 71px;
         }
-        #navigation li.second h1 {
+        #navigation li.second h2 {
             margin-left: -48px;
     }
     #navigation li.third {
         color: #ffe12a;
         width: 61px;
         }
-        #navigation li.third h1 {
+        #navigation li.third h2 {
             margin-left: -119px;
     }
     #navigation li.fourth {
         color: #1fb5ff;
         width: 66px;
         }
-        #navigation li.fourth h1 {
+        #navigation li.fourth h2 {
             margin-left: -180px;
     }
     #navigation li.fifth {
         color: #5931ff;
         width: 55px;
         }
-        #navigation li.fifth h1 {
+        #navigation li.fifth h2 {
             margin-left: -246px;
     }
     #navigation li.sixth {
         color: #b848ff;
         width: 44px;
         }
-        #navigation li.sixth h1 {
+        #navigation li.sixth h2 {
             margin-left: -301px;
     }
     #navigation li.seventh {
         color: #caff2a;
         width: 41px;
         }
-        #navigation li.seventh h1 {
+        #navigation li.seventh h2 {
             margin-left: -345px;
 }
 
