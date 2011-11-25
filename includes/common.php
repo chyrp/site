@@ -22,6 +22,10 @@
     # Should Chyrp use debugging processes?
     define('DEBUG', true);
 
+    # Constant: CHECK_UPDATES
+    # Should Chyrp check for updates?
+    define('CHECK_UPDATES', false);
+
     # Constant: CACHE_TWIG
     # If defined, this will take priority over DEBUG and toggle Twig template caching.
     # Do not enable this during theme development.

@@ -175,36 +175,27 @@
          */
         public function post_from_url($route, $request, $return_post = false) {
             $config = Config::current();
+            $post_url_parts = preg_split("!(\([^)]+\))!", $config->post_url, null, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+            $url_regex = "";
+            $url_parameters = array();
+            Trigger::current()->filter(Post::$url_attrs, "url_code");
 
-            $post_url = $config->post_url;
+            foreach ($post_url_parts as $part)
+                if (isset(Post::$url_attrs[$part])) {
+                    $url_regex .= Post::$url_attrs[$part];
+                    $url_parameters[] = trim($part, "()");
+                } else
+                    $url_regex .= preg_quote($part, "/");
 
-            foreach (explode("/", $post_url) as $path)
-                foreach (preg_split("/\(([^\)]+)\)/", $path) as $leftover) {
-                    $request  = preg_replace("/".preg_quote($leftover)."/", "", $request, 1);
-                    $post_url = preg_replace("/".preg_quote($leftover)."/", "", $post_url, 1);
-                }
-
-            $args = array_map("urldecode", explode("/", trim($request, "/")));
-
-            $post_url = $this->key_regexp(rtrim($post_url, "/"));
-            $post_url_attrs = array();
-            preg_match_all("/\(([^\/]+)\)/", $config->post_url, $parameters);
-            if (preg_match("/".$post_url."/", rtrim($request, "/"), $matches)) {
-                array_shift($matches);
-
-                foreach ($parameters[0] as $index => $parameter)
-                    if ($parameter[0] == "(") {
-                        if ($parameter == "(id)") {
-                            $post_url_attrs = array("id" => $args[$index]);
-                            break;
-                        } else
-                            $post_url_attrs[rtrim(ltrim($parameter, "("), ")")] = $args[$index];
-                    }
+            if (preg_match("/^$url_regex$/", ltrim($request, "/"), $matches)) {
+                $post_url_attrs = array();
+                for ($i = 0; $i < count($url_parameters); $i++)
+                    $post_url_attrs[$url_parameters[$i]] = urldecode($matches[$i + 1]);
 
                 if ($return_post)
                     return Post::from_url($post_url_attrs);
                 else
-                    $route->try["view"] = array($post_url_attrs, $args);
+                    $route->try["view"] = array($post_url_attrs);
             }
         }
 
@@ -228,6 +219,18 @@
          * Grabs the posts for the main page.
          */
         public function index() {
+            $sql = SQL::current();
+            $posts = $sql->select("posts",
+                                  "posts.id",
+                                  array("posts.created_at <=" => datetime(),
+                                        "posts.status" => "scheduled"))->fetchAll();
+
+            if (!empty($posts))
+                foreach ($posts as $post)
+                    $sql->update("posts",
+                                 array("id" => $post),
+                                 array("status" => "public"));
+
             $this->display("pages/index",
                            array("posts" => new Paginator(Post::find(array("placeholders" => true)),
                                                           $this->post_limit)));
@@ -246,12 +249,14 @@
                 $posts = new Paginator(Post::find(array("placeholders" => true,
                                                         "where" => array("YEAR(created_at)" => $_GET['year'],
                                                                          "MONTH(created_at)" => $_GET['month'],
-                                                                         "DAY(created_at)" => $_GET['day']))),
+                                                                         "DAY(created_at)" => $_GET['day'],
+                                                                         "status" => "public"))),
                                        $this->post_limit);
             elseif (isset($_GET['year']) and isset($_GET['month']))
                 $posts = new Paginator(Post::find(array("placeholders" => true,
                                                         "where" => array("YEAR(created_at)" => $_GET['year'],
-                                                                         "MONTH(created_at)" => $_GET['month']))),
+                                                                         "MONTH(created_at)" => $_GET['month'],
+                                                                         "status" => "public"))),
                                        $this->post_limit);
 
             $sql = SQL::current();
@@ -261,26 +266,24 @@
                     $timestamps = $sql->select("posts",
                                                array("DISTINCT YEAR(created_at) AS year",
                                                      "MONTH(created_at) AS month",
-                                                     "created_at AS created_at",
-                                                     "id"),
-                                               array("YEAR(created_at)" => $_GET['year']),
-                                               array("created_at DESC", "id DESC"),
+                                                     "created_at AS created_at"),
+                                               array("YEAR(created_at)" => $_GET['year'], "status" => "public"),
+                                               array("created_at DESC"),
                                                array(),
                                                null,
                                                null,
-                                               array("YEAR(created_at)", "MONTH(created_at)", "created_at", "id"));
+                                               array("YEAR(created_at)", "MONTH(created_at)"));
                 else
                     $timestamps = $sql->select("posts",
                                                array("DISTINCT YEAR(created_at) AS year",
                                                      "MONTH(created_at) AS month",
-                                                     "created_at AS created_at",
-                                                     "id"),
-                                               null,
-                                               array("created_at DESC", "id DESC"),
+                                                     "created_at AS created_at"),
+                                               array("status" => "public"),
+                                               array("created_at DESC"),
                                                array(),
                                                null,
                                                null,
-                                               array("YEAR(created_at)", "MONTH(created_at)", "created_at", "id"));
+                                               array("YEAR(created_at)", "MONTH(created_at)"));
 
                 $archives = array();
                 $archive_hierarchy = array();
@@ -289,7 +292,8 @@
                     $month = mktime(0, 0, 0, $time->month + 1, 0, $time->year);
 
                     $posts = Post::find(array("where" => array("YEAR(created_at)" => when("Y", $time->created_at),
-                                                               "MONTH(created_at)" => when("m", $time->created_at))));
+                                                               "MONTH(created_at)" => when("m", $time->created_at),
+                                                               "status" => "public")));
 
                     $archives[$month] = array("posts" => $posts,
                                               "year" => $time->year,
@@ -297,7 +301,7 @@
                                               "timestamp" => $month,
                                               "url" => url("archive/".when("Y/m/", $time->created_at)));
 
-                   $archive_hierarchy[$year][$month] = $posts; 
+                    $archive_hierarchy[$year][$month] = $posts; 
                 }
 
                 $this->display("pages/archive",
@@ -405,6 +409,9 @@
             if ($post->status == "draft")
                 Flash::message(__("This post is a draft."));
 
+            if ($post->status == "scheduled")
+                Flash::message(_f("This post is scheduled to be published ".relative_time($post->created_at)));
+
             if ($post->groups() and !substr_count($post->status, "{".Visitor::current()->group->id."}"))
                 Flash::message(_f("This post is only visible by the following groups: %s.", $post->groups()));
 
@@ -498,19 +505,54 @@
                     Flash::warning(__("Invalid e-mail address."));
 
                 if (!Flash::exists("warning")) {
-                    $user = User::add($_POST['login'], $_POST['password1'], $_POST['email']);
+                    if ($config->email_activation) {
+                        $to      = $_POST['email'];
+                        $subject = _f($config->name." Registration Pending");
+                        $message = _f("Hello, ".$_POST['login'].".\n\nYou are receiving this message because you recently registered at ".$config->chyrp_url."\nTo complete your registration, go to ".$config->chyrp_url."/?action=validate&email=".fix($_POST['email']));
+                        $headers = "From:".$config->email."\r\n" .
+                                   "Reply-To:".$config->email. "\r\n" .
+                                   "X-Mailer: PHP/".phpversion() ;
 
-                    Trigger::current()->call("user_registered", $user);
+                        $user = User::add($_POST['login'], $_POST['password1'], $_POST['email']);
 
-                    $_SESSION['user_id'] = $user->id;
+                        $sent = email($to, $subject, $message, $headers);
 
-                    Flash::notice(__("Registration successful."), "/");
+                        if ($sent)
+                            Flash::notice(__("The email address you provided has been sent details to confirm registration."), "/");
+                        else
+                            Flash::notice(__("There was an error emailing the activation link to your email address."), "/");
+                    } else {
+                        $user = User::add($_POST['login'], $_POST['password1'], $_POST['email']);
+
+                        Trigger::current()->call("user_registered", $user);
+
+                        $_SESSION['user_id'] = $user->id;
+
+                        Flash::notice(__("Registration successful."), "/");
+                    }
                 }
             }
 
             $this->display("forms/user/register", array(), __("Register"));
         }
+         /**
+         * Function: validate
+         * Approves a user registration for a given email.
+         */
+        public function validate() {
+            if (logged_in())
+                error(__("Error"), __("You're already logged in."));
 
+            $user = new User(array("email" => fix($_GET['email'])));
+            if ($user->no_results)
+                Flash::warning(__("A user with that email doesn't seem to exist in our database."), "/");
+
+            if (!$user->is_approved == 1) {
+                SQL::current()->query("UPDATE users SET is_approved = 1 WHERE email = '$user->email'");
+                Flash::notice(__("Your account is now active. Welcome aboard!"), "/?action=login");
+            } else
+                Flash::notice(__("Your account has already been activated."), "/");
+        }
         /**
          * Function: login
          * Process logging in. If the username and password are incorrect or if the user is already logged in, it will error.
@@ -631,6 +673,33 @@
             }
 
             $this->display("forms/user/lost_password", array(), __("Lost Password"));
+        }
+
+        /**
+         * Function: random
+         * Grabs a random post and redirects to it.
+         */
+        public function random() {
+            $sql = SQL::current();
+            if (isset($_GET['feather'])) {
+                $feather = preg_replace( '|[^a-z]|i', '', $_GET['feather'] );
+                $random = $sql->select("posts",
+                                       "posts.url",
+                                       array("posts.feather" => $feather,
+                                             "posts.status" => "public"),
+                                       array("ORDER BY" => "RAND()"),
+                                       array("LIMIT" => 1))->fetchObject();
+                $post = new Post(array("url" => $random->url));
+        	} else {
+                $random = $sql->select("posts",
+                                       "posts.url",
+                                       array("posts.status" => "public"),
+                                       array("ORDER BY" => "RAND()"),
+                                       array("LIMIT" => 1))->fetchObject();
+                $post = new Post(array("url" => $random->url));
+        	}
+
+            redirect($post->url());
         }
 
         /**

@@ -521,7 +521,7 @@
          * Generates an acceptable Title from the post's excerpt.
          *
          * Returns:
-         *     The post's excerpt. iltered -> first line -> ftags stripped -> truncated to 75 characters -> normalized.
+         *     The post's excerpt. filtered -> first line -> ftags stripped -> truncated to 75 characters -> normalized.
          */
         public function title_from_excerpt() {
             if ($this->no_results)
@@ -723,7 +723,7 @@
          * Returns a SQL query "chunk" for the "status" column permissions of the current user.
          *
          * Parameters:
-         *     $start - An array of additional statuses to allow; "registered_only" and "private" are added deterministically.
+         *     $start - An array of additional statuses to allow; "registered_only", "private" and "scheduled" are added deterministically.
          */
         static function statuses($start = array()) {
             $visitor = Visitor::current();
@@ -735,6 +735,9 @@
 
             if ($visitor->group->can("view_private"))
                 $statuses[] = "private";
+
+            if ($visitor->group->can("view_scheduled"))
+                $statuses[] = "scheduled";
 
             return "(posts.status IN ('".implode("', '", $statuses)."') OR posts.status LIKE '%{".$visitor->group->id."}%') OR (posts.status LIKE '%{%' AND posts.user_id = ".$visitor->id.")";
         }
@@ -748,16 +751,37 @@
         }
 
         /**
+         * Function: author
+         * Returns a post's author. Example: $post->author->name
+         */
+        public function author() {
+            if ($this->no_results)
+                return false;
+
+            $user = new User($this->user_id);
+            $group = new Group($user->group_id);
+
+            $author = array("nick"    => $user->login,
+                            "name"    => oneof($user->full_name, $user->login),
+                            "website" => $user->website,
+                            "email"   => $user->email,
+                            "joined"  => $user->joined_at,
+                            "group"   => $group->name);
+
+            unset($user, $group);
+
+            return (object) $author;
+        }
+
+        /**
          * Function: user
          * Returns a post's user. Example: $post->user->login
          * 
          * !! DEPRECATED AFTER 2.0 !!
          */
         public function user() {
-            if ($this->no_results)
-                return false;
-
-            return new User($this->user_id);
+            deprecated("\$post.user", "2.0", "\$post.author", debug_backtrace());
+            return self::author();
         }
 
         /**

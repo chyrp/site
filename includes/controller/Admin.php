@@ -29,7 +29,7 @@
          * Prepares Twig.
          */
         private function __construct() {
-            $this->admin_theme = fallback($_SESSION['admin_theme'], "default");
+            $this->admin_theme = fallback(Config::current()->admin_theme, "default");
 
             $this->theme = new Twig_Loader(MAIN_DIR."/admin/themes/".$this->admin_theme,
                                            (is_writable(INCLUDES_DIR."/caches") and !DEBUG) ?
@@ -89,7 +89,7 @@
             }
 
             if (empty($route->action) or $route->action == "extend") {
-                # "Modules", if they can configure the installation.
+                # "Modules", if they can can enable/disable extensions.
                 if ($visitor->group->can("toggle_extensions"))
                     return $route->action = "modules";
             }
@@ -1215,9 +1215,16 @@
                                     array("<![CDATA[", "]]>"),
                                     $sane_xml);
 
+            $sane_xml = str_replace("xmlns:excerpt=\"http://wordpress.org/excerpt/1.0/\"",
+                                    "xmlns:excerpt=\"http://wordpress.org/export/1.1/excerpt/\"",
+                                    $sane_xml);
+            $sane_xml = str_replace("xmlns:wp=\"http://wordpress.org/export/1.0/\"",
+                                    "xmlns:wp=\"http://wordpress.org/export/1.1/\"",
+                                    $sane_xml);
+
             if (!substr_count($sane_xml, "xmlns:excerpt"))
                 $sane_xml = preg_replace("/xmlns:content=\"([^\"]+)\"(\s+)/m",
-                                         "xmlns:content=\"\\1\"\\2xmlns:excerpt=\"http://wordpress.org/excerpt/1.0/\"\\2",
+                                         "xmlns:content=\"\\1\"\\2xmlns:excerpt=\"http://wordpress.org/export/1.1/excerpt/\"\\2",
                                          $sane_xml);
 
             $fix_amps_count = 1;
@@ -1236,7 +1243,7 @@
                                "/admin/?action=import");
 
             foreach ($xml->channel->item as $item) {
-                $wordpress = $item->children("http://wordpress.org/export/1.0/");
+                $wordpress = $item->children("http://wordpress.org/export/1.1/");
                 $content   = $item->children("http://purl.org/rss/1.0/modules/content/");
                 if ($wordpress->status == "attachment" or $item->title == "zz_placeholder")
                     continue;
@@ -1722,7 +1729,8 @@
                 return Flash::warning(__("Could not read feathers directory."));
 
             while (($folder = readdir($open)) !== false) {
-                if (!file_exists(FEATHERS_DIR."/".$folder."/".$folder.".php") or !file_exists(FEATHERS_DIR."/".$folder."/info.yaml")) continue;
+                if (!file_exists(FEATHERS_DIR."/".$folder."/".$folder.".php") or !file_exists(FEATHERS_DIR."/".$folder."/info.yaml"))
+                    continue;
 
                 if (file_exists(FEATHERS_DIR."/".$folder."/locale/".$config->locale.".mo"))
                     load_translator($folder, FEATHERS_DIR."/".$folder."/locale/".$config->locale.".mo");
@@ -1761,6 +1769,9 @@
          * Theme switching/previewing.
          */
         public function themes() {
+            if (!Visitor::current()->group->can("change_settings"))
+                show_403(__("Access Denied"), __("You do not have sufficient privileges to change settings."));
+
             $config = Config::current();
 
             $this->context["preview"] = !empty($_SESSION['theme']) ? $_SESSION['theme'] : "" ;
@@ -1965,11 +1976,11 @@
         public function change_theme() {
             if (!Visitor::current()->group->can("change_settings"))
                 show_403(__("Access Denied"), __("You do not have sufficient privileges to change settings."));
+
             if (empty($_GET['theme']))
                 error(__("No Theme Specified"), __("You did not specify a theme to switch to."));
 
             $config = Config::current();
-
             $config->set("theme", $_GET['theme']);
 
             if (file_exists(THEMES_DIR."/".$_GET['theme']."/locale/".$config->locale.".mo"))
@@ -1992,16 +2003,18 @@
         }
 
         /**
-         * Function: theme
+         * Function: change_admin_theme
          * Changes the admin theme.
          */
         public function change_admin_theme() {
+            if (!Visitor::current()->group->can("change_settings"))
+                show_403(__("Access Denied"), __("You do not have sufficient privileges to change settings."));
+
             if (empty($_GET['theme']))
                 error(__("No Theme Specified"), __("You did not specify a theme to switch to."));
 
             $config = Config::current();
-
-            $_SESSION['admin_theme'] = $_GET['theme'];
+            $config->set("admin_theme", $_GET['theme']);
 
             if (file_exists(ADMIN_THEMES_DIR."/".$_GET['theme']."/locale/".$config->locale.".mo"))
                 load_translator($_GET['theme'], ADMIN_THEMES_DIR."/".$_GET['theme']."/locale/".$config->locale.".mo");
@@ -2029,6 +2042,7 @@
         public function preview_theme() {
             if (!Visitor::current()->group->can("change_settings"))
                 show_403(__("Access Denied"), __("You do not have sufficient privileges to preview themes."));
+
             if (empty($_GET['theme']))
                 error(__("No Theme Specified"), __("You did not specify a theme to preview."));
 
@@ -2067,9 +2081,7 @@
             }
 
             if (empty($_POST))
-                return $this->display("general_settings",
-                                      array("locales" => $locales,
-                                            "timezones" => timezones()));
+                return $this->display("general_settings", array("locales" => $locales, "timezones" => timezones()));
 
             if (!isset($_POST['hash']) or $_POST['hash'] != Config::current()->secure_hashkey)
                 show_403(__("Access Denied"), __("Invalid security key."));
@@ -2103,6 +2115,7 @@
 
             $config = Config::current();
             $set = array($config->set("can_register", !empty($_POST['can_register'])),
+                         $config->set("email_activation", !empty($_POST['email_activation'])),
                          $config->set("default_group", $_POST['default_group']),
                          $config->set("guest_group", $_POST['guest_group']));
 
@@ -2177,7 +2190,7 @@
                     break;
                 case "slugs":
                     $title = __("Post Slugs");
-                    $body = __("Post slugs are strings to use for the URL of a post. They are directly respondible for the <code>(url)</code> attribute in a post's clean URL, or the <code>/?action=view&amp;url=<strong>foo</strong></code> in a post's dirty URL. A post slug should not contain any special characters other than hyphens.");
+                    $body = __("Post slugs are strings to use for the URL of a post. They are directly responsible for the <code>(url)</code> attribute in a post's clean URL, or the <code>/?action=view&amp;url=<strong>foo</strong></code> in a post's dirty URL. A post slug should not contain any special characters other than hyphens.");
                     break;
                 case "trackbacks":
                     $title = __("Trackbacks");
@@ -2332,6 +2345,7 @@
             $this->context["site"]       = Config::current();
             $this->context["visitor"]    = $visitor;
             $this->context["logged_in"]  = logged_in();
+            $this->context["new_update"] = update_check();
             $this->context["route"]      = $route;
             $this->context["hide_admin"] = isset($_SESSION["hide_admin"]);
             $this->context["now"]        = time();
@@ -2348,22 +2362,22 @@
 
             $show = array("write" => array($visitor->group->can("add_draft", "add_post", "add_page")),
                           "manage" => array($visitor->group->can("view_own_draft",
-                                                                   "view_draft",
-                                                                   "edit_own_draft",
-                                                                   "edit_own_post",
-                                                                   "edit_post",
-                                                                   "delete_own_draft",
-                                                                   "delete_own_post",
-                                                                   "delete_post",
-                                                                   "add_page",
-                                                                   "edit_page",
-                                                                   "delete_page",
-                                                                   "add_user",
-                                                                   "edit_user",
-                                                                   "delete_user",
-                                                                   "add_group",
-                                                                   "edit_group",
-                                                                   "delete_group")),
+                                                                 "view_draft",
+                                                                 "edit_own_draft",
+                                                                 "edit_own_post",
+                                                                 "edit_post",
+                                                                 "delete_own_draft",
+                                                                 "delete_own_post",
+                                                                 "delete_post",
+                                                                 "add_page",
+                                                                 "edit_page",
+                                                                 "delete_page",
+                                                                 "add_user",
+                                                                 "edit_user",
+                                                                 "delete_user",
+                                                                 "add_group",
+                                                                 "edit_group",
+                                                                 "delete_group")),
                           "settings" => array($visitor->group->can("change_settings")),
                           "extend" => array($visitor->group->can("toggle_extensions")));
 
@@ -2390,7 +2404,9 @@
 
             $this->context["navigation"]["extend"] = array("title" => __("Extend"),
                                                            "show" => in_array(true, $show["extend"]),
-                                                           "selected" => (in_array($action, $extend)));
+                                                           "selected" => (in_array($action, $extend) or
+                                                                         match(array("/_extend$/",
+                                                                                     "/_editor$/"), $action)));
 
             $this->subnav_context($route->action);
 
