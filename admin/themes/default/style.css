@@ -567,9 +567,12 @@ table tbody tr td.controls a:visited {
 }
 tr.draft,
 tr.excerpt,
+tr.scheduled,
 tr.draft td,
 tr.excerpt td,
-tr.draft td.main {
+tr.scheduled td,
+tr.draft td.main,
+tr.scheduled td.main {
     background-color: #dff4ff;
     border-color: #c2e1ef !important;
     color: #336699;
@@ -945,4 +948,3 @@ br#after_options {
     display: none;
 }
 /* @end */
-
