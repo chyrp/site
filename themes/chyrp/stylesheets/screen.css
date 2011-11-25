@@ -238,11 +238,11 @@ form.search {
     }
     #navigation li.selected.sixth,
     #navigation li.sixth:hover {
-        background: #b848ff;
+        background: #01A2A6;
     }
     #navigation li.selected.seventh,
     #navigation li.seventh:hover {
-        background: #caff2a;
+        background: #b848ff;
     }
     #navigation li.first {
         color: #ff2e99;
@@ -277,14 +277,14 @@ form.search {
             margin-left: -246px;
     }
     #navigation li.sixth {
-        color: #b848ff;
-        width: 44px;
+        color: #01A2A6;
+        width: 45px;
         }
         #navigation li.sixth h2 {
             margin-left: -301px;
     }
     #navigation li.seventh {
-        color: #caff2a;
+        color: #b848ff;
         width: 41px;
         }
         #navigation li.seventh h2 {
@@ -300,7 +300,7 @@ form.search {
     #footer li {
         list-style: none;
     }
-    #footer .toogeneric a {
+    #footer .wakawaka a {
         float: right;
         font-size: 13em;
         position: relative;
@@ -308,7 +308,7 @@ form.search {
         color: #222;
         height: 0;
     }
-    #footer .toogeneric a:hover {
+    #footer .wakawaka a:hover {
         color: #fff;
 }
 
@@ -699,6 +699,35 @@ form.search {
         margin-left: 1em;
         font-size: .9em;
 }
+
+/* Pages area */
+.page {
+    }
+    .page #page-side {
+        border-left: 2px solid #1C1C1C;
+        float: right;
+        margin-left: 10px;
+        padding: 10px 0px 10px 20px;
+        position: relative;
+        top: -11px;
+        width: 130px; 
+        }
+        .page #page-side ul {
+            margin: 0;
+            }
+            .page #page-side li {
+                list-style: none;
+                border-bottom: 1px solid #2c2c2c;
+                padding-top: 5px;
+                }
+                .page #page-side li a {
+                    display: block;
+                    width: 100%;
+                }
+                .page #page-side li a:hover {
+                    color: #ff2e99;
+                    }
+
 
 /* Blog area */
 #blog {

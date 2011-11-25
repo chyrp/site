@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-type" content="$theme.type; charset=utf-8" />
+        <meta http-equiv="content-type" content="$theme.type; charset=utf-8" />
+        <meta http-equiv="style-content-type" content="text/css; charset=utf-8" />
         <title>{% block title %}$site.name &#8250; Extend {% if title %} &#8250; ${ title | escape } {% endif %}{% endblock %}</title>
         <meta name="generator" content="Chyrp" />
         <meta name="description" content="$site.description" />
@@ -65,6 +66,10 @@ ${ trigger.call("head") }
             </li>
             <li class="sixth">
                 <h2><a href="$site.url">Chyrp:&nbsp;Extend</a></h2>
+                <a href="{% url "about" in Main %}">About</a>
+            </li>
+            <li class="seventh">
+                <h2><a href="$site.url">Chyrp:&nbsp;Extend</a></h2>
                 <a href="{% url "blog" in Main %}">Blog</a>
             </li>
         </ul>
@@ -101,9 +106,9 @@ ${ trigger.call("head") }
         </div>
 
         <ul id="footer">
-            <li class="toogeneric"><a href="http://chyrp.net/">*</a></li>
+            <li class="wakawaka"><a href="http://xhezairi.com/">*</a></li>
             <li>${ "Powered by <a class=\"chyrp\" href=\"http://chyrp.net/\">Chyrp</a>" | translate } &copy; 2011 &mdash; <a class="atom" href="{% url "feed" %}">atom</a></li>
-            <iframe src="http://www.facebook.com/plugins/like.php?app_id=261610940518826&amp;href=http%3A%2F%2Fwww.facebook.com%2FChyrp&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=dark&amp;font=lucida+grande&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
+            <li><iframe src="http://www.facebook.com/plugins/like.php?app_id=261610940518826&amp;href=http%3A%2F%2Fwww.facebook.com%2FChyrp&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=dark&amp;font=lucida+grande&amp;height=80" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe></li>
         </ul>
 
         {% if debug and visitor.group.name == "Admin" %}
