@@ -138,6 +138,7 @@
             $config->set("email", $_POST['email']);
             $config->set("locale", "en_US");
             $config->set("theme", "stardust");
+            $config->set("admin_theme", "default");
             $config->set("posts_per_page", 5);
             $config->set("feed_items", 20);
             $config->set("clean_urls", false);
@@ -214,6 +215,7 @@
                              email VARCHAR(128) DEFAULT '',
                              website VARCHAR(128) DEFAULT '',
                              group_id INTEGER DEFAULT 0,
+                             is_approved int(2) DEFAULT 1,
                              joined_at DATETIME DEFAULT NULL,
                              UNIQUE (login)
                          ) DEFAULT CHARSET=utf8");
@@ -250,6 +252,7 @@
                                      __("Toggle Extensions"),
                                      __("View Site"),
                                      __("View Private Posts"),
+                                     __("View Scheduled Posts"),
                                      __("View Drafts"),
                                      __("View Own Drafts"),
                                      __("Add Posts"),
@@ -276,6 +279,7 @@
                            "toggle_extensions" => "Toggle Extensions",
                            "view_site" => "View Site",
                            "view_private" => "View Private Posts",
+                           "view_scheduled" => "View Scheduled Posts",
                            "view_draft" => "View Drafts",
                            "view_own_draft" => "View Own Drafts",
                            "add_post" => "Add Posts",
@@ -307,7 +311,7 @@
 
             $groups = array("admin"  => array_keys($names),
                             "member" => array("view_site"),
-                            "friend" => array("view_site", "view_private"),
+                            "friend" => array("view_site", "view_private", "view_scheduled"),
                             "banned" => array(),
                             "guest"  => array("view_site"));
 
@@ -338,6 +342,8 @@
                                    "group_id" => $group_id["admin"],
                                    "joined_at" => datetime()));
 
+            # $user_id = $sql->select("users", "id", array("login" => $_POST['login']))->fetchColumn();
+            # $_SESSION['user_id'] = $user_id;
             $installed = true;
         }
     }
@@ -620,7 +626,7 @@
         <?php else: ?>
             <h1><?php echo __("Done!"); ?></h1>
             <p>
-                <?php echo __("Chyrp has been successfully installed."); ?>
+                <?php echo __("Chyrp has been successfully installed and you have been logged in."); ?>
             </p>
             <h2><?php echo __("So, what now?"); ?></h2>
             <ol>
