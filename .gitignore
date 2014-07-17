@@ -5,7 +5,12 @@ uploads/*
 includes/config.yaml.php
 includes/database.yaml.php
 themes/*
-!themes/stardust
+!themes/C3
 releases
 old
 .git
+.sass-cache/
+.bowerrc
+config.codekit
+themes/C3/assets/bower_components/*
+!themes/C3/assets/bower_components/foundation/

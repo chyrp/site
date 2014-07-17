@@ -1,0 +1,42 @@
+    <div class="fixed contain-to-grid">
+      <nav class="top-bar" data-topbar>
+        <ul class="title-area">
+          <li class="name first${ "home" | selected(route.action, true) }">
+            <h2><a href="$site.url">Chyrp</a></h2>
+            <a href="$site.url">Home</a>
+          </li>
+          <li class="toggle-topbar menu-icon">
+            <a href="#"><span>Menu</span></a>
+          </li>
+        </ul>
+
+        <section class="top-bar-section">
+          <ul class="right">
+            <li class="second${ "download" | selected(route.action, true) }">
+                <a href="{% url "download" in Main %}">Download</a>
+            </li>
+            <li class="third">
+                <a href="{% url "index" in Discuss %}">Discuss</a>
+            </li>
+            <li class="fourth">
+                <a href="{% url "index" in Extend %}">Extend</a>
+            </li>
+            <li class="fifth">
+                <a href="{% url "code" in Main %}">Code</a>
+            </li>
+            <li class="sixth${ true | selected(route.action == "page", true) }">
+                <a href="{% url "about" in Main %}">About</a>
+            </li>
+            <li class="seventh${ true | selected(route.action != "home" and route.action != "download" and route.action != "page", true) }">
+                <a href="{% url "blog" in Main %}">Blog</a>
+            </li>
+            <li>
+              <form class="search" action="{% url "/" %}" method="get">
+                  <input type="hidden" name="action" value="search" />
+                  <input type="text" name="query" id="query" />
+              </form>
+            </li>
+          </ul>
+        </section>
+      </nav>
+    </div>
